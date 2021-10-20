@@ -7,20 +7,20 @@ const PORT = process.env.PORT || 3002;
 const app = express();
 
 // Have Node serve the files for our built React app
-app.use(express.static(path.resolve(__dirname, '../web-build/')));
+app.use(express.static(path.resolve(__dirname, '../frontend/build')));
 
 
 // First you need to create a connection to the database
 // Be sure to replace 'user' and 'password' with the correct values
 const con = mysql.createConnection({
-    host: 'yvu4xahse0smimsc.chr7pe7iynqr.eu-west-1.rds.amazonaws.com',
-    user: 'rdxr45odtrm8ay4m',
-    password: 'gp77l7vqtdg3iqi6',
+    host: 'pei17y9c5bpuh987.chr7pe7iynqr.eu-west-1.rds.amazonaws.com',
+    user: 'yjrfer6d5t0txe8w',
+    password: 'uexuj8ax4fjc9rcm',
     port: "3306",
-    database: 'fhg6lye7nr6gxocf'
+    database: 'din7oouyzkj380wd'
 });
 
-const data_table = "vut-qrticket";
+const data_table = "sjezd2021";
 
 con.connect((err) => {
     if (err) {
