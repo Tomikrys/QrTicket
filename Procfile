@@ -1,1 +1,1 @@
-web: cd web-build
+web: npx serve web-build
