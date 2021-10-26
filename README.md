@@ -10,7 +10,6 @@ jak spustit
 stačí v aplikaci Expo Go naskenovat QR a jede to na mobilu
 
 build webu
-	npx expo-optimize
 	expo build:web
 
 aby fungoval Android emulator
