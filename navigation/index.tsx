@@ -14,8 +14,9 @@ import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
 import ModalScreen from '../screens/ModalScreen';
 import NotFoundScreen from '../screens/NotFoundScreen';
-import TabOneScreen from '../screens/TabOneScreen';
-import TabTwoScreen from '../screens/TabTwoScreen';
+import QrScreen from '../screens/QrScreen';
+import SettingsScreen from '../screens/SettingsScreen';
+import TictetsScreen from '../screens/TictetsScreen';
 import { RootStackParamList, RootTabParamList, RootTabScreenProps } from '../types';
 import LinkingConfiguration from './LinkingConfiguration';
 
@@ -64,8 +65,16 @@ function BottomTabNavigator() {
       }}>
       <BottomTab.Screen
         name="TabOne"
-        component={TabOneScreen}
-        options={({ navigation }: RootTabScreenProps<'TabOne'>) => ({
+        component={SettingsScreen}
+        options={{
+          title: 'Edit Users',
+          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+        }}
+      />
+      <BottomTab.Screen
+        name="TabTwo"
+        component={QrScreen}
+        options={({ navigation }: RootTabScreenProps<'TabTwo'>) => ({
           title: 'Scan QR',
           tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
           headerRight: () => (
@@ -85,8 +94,8 @@ function BottomTabNavigator() {
         })}
       />
       <BottomTab.Screen
-        name="TabTwo"
-        component={TabTwoScreen}
+        name="TabThree"
+        component={TictetsScreen}
         options={{
           title: 'Edit Users',
           tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
