@@ -2,17 +2,17 @@ import * as React from 'react';
 import { StyleSheet } from 'react-native';
 
 import EditScreenInfo from '../components/EditScreenInfo';
-import { Text, View } from '../components/Themed';
+import { View } from '../components/Themed';
 import { RootTabScreenProps } from '../types';
 import QrTicket from './components/QrReader';
+import { Button, Input, Layout, Text, Toggle } from '@ui-kitten/components';
 
 export default function QrScreen({ navigation }: RootTabScreenProps<'TabOne'>) {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Qr Scanner</Text>
+      <Text style={styles.title}>Scan QR</Text>
       <QrTicket></QrTicket>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <EditScreenInfo path="/screens/QrScreen.tsx" />
+      <Button>Validate</Button>
     </View>
   );
 }

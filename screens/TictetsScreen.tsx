@@ -4,21 +4,41 @@ import { StyleSheet } from 'react-native';
 import EditScreenInfo from '../components/EditScreenInfo';
 import { View } from '../components/Themed';
 import QrCamera from './components/QrCamera';
-import { Layout, Text } from '@ui-kitten/components';
+import { Layout, Text, ViewPager } from '@ui-kitten/components';
+import SettingsScreen from './SettingsScreen';
+import QrScreen from './QrScreen';
+
 
 export default function TictetsScreen() {
+  const [selectedIndex, setSelectedIndex] = React.useState(0);
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Database update</Text>
-      <QrCamera></QrCamera>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <Layout style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text category='h1'>HOME</Text>
-      </Layout>
-      <EditScreenInfo path="/screens/TictetsScreen.tsx" />
+      <ViewPager
+        selectedIndex={selectedIndex}
+        onSelect={index => setSelectedIndex(index)}>
+        <Layout
+          style={ViewPagerstyles.tab}
+          level='2'>
+          <SettingsScreen ></SettingsScreen>
+        </Layout>
+        <Layout
+          style={ViewPagerstyles.tab}
+          level='2'>
+          <QrScreen></QrScreen>
+        </Layout>
+      </ViewPager>
     </View>
   );
 }
+
+const ViewPagerstyles = StyleSheet.create({
+  tab: {
+    height: 192,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});
 
 const styles = StyleSheet.create({
   container: {

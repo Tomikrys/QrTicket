@@ -67,13 +67,13 @@ function BottomTabNavigator() {
         name="TabOne"
         component={SettingsScreen}
         options={{
-          title: 'Edit Users',
+          title: 'Settings',
           tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
         }}
       />
       <BottomTab.Screen
         name="TabTwo"
-        component={QrScreen}
+        component={QrScreen }
         options={({ navigation }: RootTabScreenProps<'TabTwo'>) => ({
           title: 'Scan QR',
           tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,

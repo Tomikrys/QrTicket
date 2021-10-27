@@ -1,3 +1,4 @@
+import { Select, SelectItem, Toggle } from '@ui-kitten/components';
 import * as React from 'react';
 import { StyleSheet } from 'react-native';
 
@@ -9,10 +10,21 @@ import QrTicket from './components/QrReader';
 export default function SettingsScreen({ navigation }: RootTabScreenProps<'TabOne'>) {
   return (
     <View style={styles.container}>
-      <h1>hello</h1>
-      <Text style={styles.title}></Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <EditScreenInfo path="/screens/SettingsScreen.tsx" />
+      <Text style={styles.title}>Settings</Text>
+      <Text>What to check</Text>
+      <Select>
+        <SelectItem title='Dinner Fri'/>
+        <SelectItem title='Lunch Sat'/>
+        <SelectItem title='Dinner Sat'/>
+      </Select>
+      <Text>Validate</Text>
+      <Toggle></Toggle>
+      <Text>Autohide</Text>
+      <Toggle></Toggle>
+      <Text>Show data</Text>
+      <Toggle></Toggle>
+      <Text>Toggle camera</Text>
+      <Toggle></Toggle>
     </View>
   );
 }
