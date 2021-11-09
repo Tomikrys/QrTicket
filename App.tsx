@@ -1,30 +1,29 @@
-import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import useCachedResources from './hooks/useCachedResources';
-import Navigation from './navigation';
+import ViewPagerNavigator from './navigation';
 import * as eva from '@eva-design/eva';
-import { ApplicationProvider, Layout, Text } from '@ui-kitten/components';
-import { Appearance, AppearanceProvider, useColorScheme } from 'react-native-appearance';
-import { DarkTheme, NavigationContainer } from '@react-navigation/native';
+import { ApplicationProvider, IconRegistry } from '@ui-kitten/components';
+import { EvaIconsPack } from '@ui-kitten/eva-icons';
+import { StatusBar } from 'react-native';
 
 export default function App() {
   const isLoadingComplete = useCachedResources();
-  const colorScheme = useColorScheme();
 
   if (!isLoadingComplete) {
     return null;
   } else {
     return (
+    <>
+      <IconRegistry icons={EvaIconsPack} />
       <ApplicationProvider {...eva} theme={eva.light}>
-        <AppearanceProvider>
-          <SafeAreaProvider>
-            <Navigation colorScheme={colorScheme} />
-            <StatusBar />
-          </SafeAreaProvider>
-        </AppearanceProvider>
+        <SafeAreaProvider>
+          <StatusBar hidden={true} />
+          <ViewPagerNavigator />
+        </SafeAreaProvider>
       </ApplicationProvider>
+    </>
     );
   }
 }

@@ -1,18 +1,79 @@
-import * as React from 'react';
-import { StyleSheet } from 'react-native';
+import React from 'react';
+import { TouchableWithoutFeedback, StyleSheet } from 'react-native';
 
 import EditScreenInfo from '../components/EditScreenInfo';
 import { View } from '../components/Themed';
-import { RootTabScreenProps } from '../types';
-import QrTicket from './components/QrReader';
-import { Button, Input, Layout, Text, Toggle } from '@ui-kitten/components';
+import QrReader from './components/QrReader';
+import { Button, Input, Icon, BottomNavigation, BottomNavigationTab, Text } from '@ui-kitten/components';
 
-export default function QrScreen({ navigation }: RootTabScreenProps<'TabOne'>) {
+import ModalScreen from '../screens/ModalScreen';
+
+const ticketTypes = ['Breakfast', 'Lunch', 'Dinner']
+
+export default function QrScreen() {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Scan QR</Text>
-      <QrTicket></QrTicket>
-      <Button>Validate</Button>
+      <QrReader />
+      <ListButton />
+      <ManualValidation />
+      <BottomTicketTypeSelector />
+    </View>
+  );
+}
+
+function ListButton() {
+  const MenuIcon = (props) => (
+    <Icon {...props} name='menu'/>
+  );
+
+  return (
+    <Button style={styles.button} appearance='ghost' status='basic' accessoryLeft={MenuIcon}/>
+  );
+}
+
+function BottomTicketTypeSelector() {
+  const [selectedIndex, setSelectedIndex] = React.useState(0);
+
+  return (
+    <BottomNavigation
+      selectedIndex={selectedIndex}
+      onSelect={index => setSelectedIndex(index)}
+      style={{}}>
+      {ticketTypes.map(item => (
+           <BottomNavigationTab title={item} />
+         )
+      )}
+    </BottomNavigation>
+  );
+}
+
+function ManualValidation() {
+  const [value, setValue] = React.useState('');
+
+  const clearSearchBar = () => {
+    setValue('');
+  };
+
+  const renderIcon = (props) => (
+    <TouchableWithoutFeedback onPress={clearSearchBar}>
+      <Icon {...props} name={'close-outline'}/>
+    </TouchableWithoutFeedback>
+  );
+
+  return (
+    <View style={styles.searchBox}>
+      <Input
+        value={value}
+        autoCapitalize='none'
+        autoCorrect={false}
+        placeholder='Scan QR'
+        status='control'
+        size='large'
+        style={styles.searchBar}
+        clearButtonMode='while-editing'
+        accessoryRight={renderIcon}
+        onChangeText={nextValue => setValue(nextValue)}
+      />
     </View>
   );
 }
@@ -20,16 +81,22 @@ export default function QrScreen({ navigation }: RootTabScreenProps<'TabOne'>) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    width: '100%',
+    justifyContent: 'space-between',
+    flexDirection: 'column',
   },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
+  searchBox: {
+    backgroundColor: 'transparent',
+    height: '70%',
+    justifyContent: 'flex-end'
   },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
+  searchBar: {
+    width: '50%',
+    alignSelf: 'center',
+    textAlign: 'center',
+    backgroundColor: 'rgba(80,80,80,0.5)'
   },
+  button: {
+    alignSelf: 'flex-start',
+  }
 });
