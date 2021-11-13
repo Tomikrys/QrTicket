@@ -4,6 +4,7 @@ import { StyleSheet } from 'react-native';
 import Colors from '../constants/Colors';
 import QrScreen from '../screens/QrScreen';
 import TicketsScreen from '../screens/TicketsScreen';
+import ManualValidationScreen from '../screens/ManualValidationScreen'
 import { Layout, Text, ViewPager } from '@ui-kitten/components';
 
 export default function ViewPagerNavigator() {
@@ -23,7 +24,12 @@ export default function ViewPagerNavigator() {
         style={styles.tab}
         level='1'>
         <QrScreen />
-      </Layout>
+          </Layout>
+        <Layout
+            style={styles.tab}
+            level='1'>
+              <ManualValidationScreen />
+        </Layout>
     </ViewPager>
   );
 };

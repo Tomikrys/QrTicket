@@ -2,10 +2,20 @@ import React from 'react';
 import { Button, Divider, Input, Icon, List, ListItem, TopNavigation, TopNavigationAction } from '@ui-kitten/components';
 import { TouchableWithoutFeedback, StyleSheet } from 'react-native';
 
-const data = new Array(20).fill({
-  title: 'Person',
-  description: 'TICKET ID 0000',
-});
+const Tickets_data = [
+    {
+        title: 'Karel Novák',
+        description: 'TICKET ID 0001'
+    },
+    {
+        title: 'Pavel Mrázek',
+        description: 'TICKET ID 0002'
+    },
+    {
+        title: 'Filip Kladòák',
+        description: 'TICKET ID 0003'
+    }
+]
 
 const BackIcon = (props) => (
   <Icon {...props} name='arrow-ios-forward-outline'/>
@@ -49,12 +59,13 @@ export default function TicketsScreen() {
   );
 
   const renderItem = ({ item, index }) => (
-    <ListItem
-      title={`${item.title} ${index + 1}`}
-      description={`${item.description} ${index + 1}`}
-      accessoryLeft={renderItemIcon}
-      accessoryRight={renderEditIcon}
-      style={styles.listItem}
+      <ListItem
+          key={index}
+        title={item.title}
+        description={item.description}
+        accessoryLeft={renderItemIcon}
+        accessoryRight={renderEditIcon}
+        style={styles.listItem}
     />
   );
 
@@ -70,9 +81,9 @@ export default function TicketsScreen() {
       />
       <Divider/>
       <List
-        style={styles.list}
-        data={data}
-        renderItem={renderItem}
+              style={styles.list}
+              data={Tickets_data}
+              renderItem={renderItem}
       />
       <Divider/>
       <SearchBar/>

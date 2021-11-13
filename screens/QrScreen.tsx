@@ -1,25 +1,68 @@
 import React from 'react';
 import { TouchableWithoutFeedback, StyleSheet } from 'react-native';
 
-import EditScreenInfo from '../components/EditScreenInfo';
+//import EditScreenInfo from '../components/EditScreenInfo';
 import { View } from '../components/Themed';
 import QrReader from './components/QrReader';
-import { Button, Input, Icon, BottomNavigation, BottomNavigationTab, Text } from '@ui-kitten/components';
+import { Button, Layout, Input, MenuItem, OverflowMenu, Icon, BottomNavigation, BottomNavigationTab, Text } from '@ui-kitten/components';
 
-import ModalScreen from '../screens/ModalScreen';
+//import ModalScreen from '../screens/ModalScreen';
 
 const ticketTypes = ['Breakfast', 'Lunch', 'Dinner']
 
+const Scan_types = [
+    'Diner',
+    'Lunch',
+    'Breakfast',
+    'Another',
+];
+
 export default function QrScreen() {
   return (
-    <View style={styles.container}>
-      <QrReader />
+      <View style={styles.container}>
+          <QrReader />
+          
       <ListButton />
-      <ManualValidation />
-      <BottomTicketTypeSelector />
+          {<ManualValidation />
+              }
+          <ScanType />
+          { //<BottomTicketTypeSelector/>
+              }
     </View>
   );
 }
+
+function ScanType() {
+    const [visible, setVisible] = React.useState(false);
+    const [selectedIndex, setSelectedIndex] = React.useState(1);
+
+    const onItemSelect = (index) => {
+        setSelectedIndex(index);
+        setVisible(false);
+    };
+
+    const renderToggleButton = () => (
+        <Button onPress={() => setVisible(true)}>
+            Scan type
+        </Button>
+    );
+
+    return (
+        <Layout style={styles.container} level='1'>
+            <OverflowMenu
+                anchor={renderToggleButton}
+                backdropStyle={styles.backdrop}
+                visible={visible}
+                selectedIndex={selectedIndex}
+                onSelect={onItemSelect}
+                onBackdropPress={() => setVisible(false)}>
+                {Scan_types.map((type, index) =>
+                    <MenuItem key={index} title={type} />
+                    )}
+            </OverflowMenu>
+        </Layout>
+    )
+};
 
 function ListButton() {
   const MenuIcon = (props) => (
@@ -84,6 +127,7 @@ const styles = StyleSheet.create({
     width: '100%',
     justifyContent: 'space-between',
     flexDirection: 'column',
+    minHeight: 144,
   },
   searchBox: {
     backgroundColor: 'transparent',
@@ -98,5 +142,8 @@ const styles = StyleSheet.create({
   },
   button: {
     alignSelf: 'flex-start',
-  }
+    },
+  backdrop: { 
+      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
 });
