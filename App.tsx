@@ -2,11 +2,12 @@ import React from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import useCachedResources from './hooks/useCachedResources';
-import ViewPagerNavigator from './navigation';
 import * as eva from '@eva-design/eva';
 import { ApplicationProvider, IconRegistry } from '@ui-kitten/components';
 import { EvaIconsPack } from '@ui-kitten/eva-icons';
 import { StatusBar } from 'react-native';
+
+import Navigator from './navigation/';
 
 export default function App() {
   const isLoadingComplete = useCachedResources();
@@ -16,11 +17,11 @@ export default function App() {
   } else {
     return (
     <>
-      <IconRegistry icons={EvaIconsPack} />
       <ApplicationProvider {...eva} theme={eva.light}>
+        <StatusBar hidden={false} backgroundColor='gray' barStyle='black'/>
+        <IconRegistry icons={EvaIconsPack} />
         <SafeAreaProvider>
-          <StatusBar hidden={true} />
-          <ViewPagerNavigator />
+          <Navigator />
         </SafeAreaProvider>
       </ApplicationProvider>
     </>

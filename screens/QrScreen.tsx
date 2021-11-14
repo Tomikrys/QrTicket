@@ -1,12 +1,9 @@
 import React from 'react';
 import { TouchableWithoutFeedback, StyleSheet } from 'react-native';
 
-//import EditScreenInfo from '../components/EditScreenInfo';
 import { View } from '../components/Themed';
 import QrReader from './components/QrReader';
 import { Button, Layout, Input, MenuItem, OverflowMenu, Icon, BottomNavigation, BottomNavigationTab, Text } from '@ui-kitten/components';
-
-//import ModalScreen from '../screens/ModalScreen';
 
 const ticketTypes = ['Breakfast', 'Lunch', 'Dinner']
 
@@ -113,6 +110,7 @@ function ManualValidation() {
         status='control'
         size='large'
         style={styles.searchBar}
+        textStyle={styles.searchBarText}
         clearButtonMode='while-editing'
         accessoryRight={renderIcon}
         onChangeText={nextValue => setValue(nextValue)}
@@ -137,8 +135,10 @@ const styles = StyleSheet.create({
   searchBar: {
     width: '50%',
     alignSelf: 'center',
-    textAlign: 'center',
     backgroundColor: 'rgba(80,80,80,0.5)'
+  },
+  searchBarText: {
+    textAlign: 'center',
   },
   button: {
     alignSelf: 'flex-start',
