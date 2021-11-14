@@ -1,6 +1,6 @@
 import React from 'react';
 import { View } from '../components/Themed';
-import { Button, Divider, Input, Icon, List, ListItem, TopNavigation, TopNavigationAction } from '@ui-kitten/components';
+import { Button, Divider, Input, Icon, List, ListItem, TopNavigation, TopNavigationAction, Layout, Card, Modal, Text } from '@ui-kitten/components';
 import { TouchableWithoutFeedback, StyleSheet } from 'react-native';
 
 export default function ManualValidationScreen() {
@@ -8,9 +8,9 @@ export default function ManualValidationScreen() {
     return (
         <React.Fragment>
             <TopNavigation
-                title='Manual Validation'
+                title='Screen for testing'
             />
-            <Input
+            {/* <Input
                 placeholder='Place your Text'
             />
             <Button onPress={() => {
@@ -19,10 +19,34 @@ export default function ManualValidationScreen() {
                     VALIDATE
             </Button>
             <Divider />
-            <ManualValidation />
+            <ManualValidation /> */}
+            <MyModal/>
         </React.Fragment>
     );
 };
+
+function MyModal(){
+    const [visible, setVisible] = React.useState(false);
+  
+    return (
+      <Layout style={styles.container} level='1'>
+  
+        <Button onPress={() => setVisible(true)}>
+          TOGGLE MODAL
+        </Button>
+  
+        <Modal visible={visible}>
+          <Card disabled={true}>
+            <Text>Welcome to UI Kitten 😻</Text>
+            <Button onPress={() => setVisible(false)}>
+              DISMISS
+            </Button>
+          </Card>
+        </Modal>
+  
+      </Layout>
+    );
+  }
 
 function ManualValidation() {
     const [value, setValue] = React.useState('');

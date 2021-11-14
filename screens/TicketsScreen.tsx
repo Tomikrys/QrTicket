@@ -4,15 +4,15 @@ import { TouchableWithoutFeedback, StyleSheet } from 'react-native';
 
 const Tickets_data = [
     {
-        title: 'Karel Nov·k',
+        title: 'Karel Novak',
         description: 'TICKET ID 0001'
     },
     {
-        title: 'Pavel Mr·zek',
+        title: 'Pavel Mrazek',
         description: 'TICKET ID 0002'
     },
     {
-        title: 'Filip KladÚ·k',
+        title: 'Filip Klad≈à√°k',
         description: 'TICKET ID 0003'
     }
 ]
