@@ -1,57 +1,72 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
 
-import Colors from '../constants/Colors';
 import QrScreen from '../screens/QrScreen';
 import TicketsScreen from '../screens/TicketsScreen';
-import ManualValidationScreen from '../screens/ManualValidationScreen'
-import { IndexPath, Layout, Text, ViewPager } from '@ui-kitten/components';
+import LoginScreen from '../screens/LoginScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 
-export default function ViewPagerNavigator() {
-  // index for pageviewer
-  const [selectedIndex, setSelectedIndex] = React.useState(0);
+import { NavigationContainer } from '@react-navigation/native';
+import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer';
+import { KeyboardAvoidingView } from 'react-native';
+
+/*const RootNavigator = createStackNavigator({
+  Login: { screen: QrScreen ,
+           navigationBarStyle : {navBarHidden: true },
+           navigationOptions: {
+           headerShown: false,
+           }
+  },
+  AfterLogin: { screen: MyDrawerNavigator,
+    navigationBarStyle : {navBarHidden: true },
+    navigationOptions: {
+      headerShown: false,
+    } },
+});*/
+
+
+export default function Navigator() {
+  const Drawer = createDrawerNavigator();
+
   // is set from settings screen --- TODO vyresit aby nebylo natvrdo registration ale prvni ze seznamu
   const [itemToValidate, setItemToValidate] = React.useState("registration");
   // bool if the ticked should be marked as used
   const [markAsUsed, setMarkAsUsed] = React.useState(true);
 
-  return (
-    <ViewPager
-      selectedIndex={selectedIndex}
-      onSelect={index => setSelectedIndex(index)}
-      style={styles.viewpager}>
-      <Layout
-        // style={styles.tab}
-        level='1'>
-        <SettingsScreen itemToValidate={itemToValidate} setItemToValidate={setItemToValidate} setMarkAsUsed={setMarkAsUsed}/>
-      </Layout>
-      <Layout
-        style={styles.tab}
-        level='1'>
-        <QrScreen itemToValidate={itemToValidate} markAsUsed={markAsUsed}/>
-      </Layout>
-      <Layout
-        style={styles.tab}
-        level='1'>
-        <TicketsScreen />
-      </Layout>
-      <Layout
-        style={styles.tab}
-        level='1'>
-        <ManualValidationScreen />
-      </Layout>
-    </ViewPager>
-  );
-};
+  const screen = () => (
+    <QrScreen itemToValidate={itemToValidate} markAsUsed={markAsUsed}/>
+  )
 
-const styles = StyleSheet.create({
-  tab: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  viewpager: {
-    flex: 1,
-  },
-});
+  function CustomDrawerContent(props) {
+  /*
+        <DrawerContentScrollView {...props}>
+          <DrawerItemList {...props} />
+        </DrawerContentScrollView>
+  */
+// <TicketsScreen />
+    return (
+      <KeyboardAvoidingView style={{flex:1}} behavior='height' keyboardVerticalOffset={40}>
+        <SettingsScreen itemToValidate={itemToValidate} setItemToValidate={setItemToValidate} setMarkAsUsed={setMarkAsUsed}/>
+      </KeyboardAvoidingView>
+    );
+  }
+
+  return (
+  <NavigationContainer>
+    <Drawer.Navigator initialRouteName='LoginScreen' backBehavior='initialRoute' drawerContent={(props) => <CustomDrawerContent {...props} />} screenOptions={{ drawerStyle: { width: '90%' },
+    header: ({ navigation, route, options }) => {
+  return (<></>); // TODO
+} }}>
+      <Drawer.Screen
+        name="LoginScreen"
+        component={LoginScreen}
+        options={{ drawerLabel: 'LoginScreen', swipeEdgeWidth: 0 }}
+      />
+      <Drawer.Screen
+        name="QrScreen"
+        component={screen}
+        options={{ drawerLabel: 'QrScreen', swipeEdgeWidth: 10000 }}
+      />
+    </Drawer.Navigator>
+  </NavigationContainer>
+  );
+}
