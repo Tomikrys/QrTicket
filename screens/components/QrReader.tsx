@@ -39,7 +39,7 @@ export default function QrReader({ itemToValidate, markAsUsed }) {
       .then((res) => res.json())
       .then((data) => {
         setResponseToModal(data.message[0]);
-        setDataToModal(getTextForModal(responseToModal, itemToValidate));
+        setDataToModal(getTextForModal(data.message[0], itemToValidate));
       })
       .catch(function (error) {
         alert("ERROR: Chyba připojení k databázi při načítání vstupenky." + error);
