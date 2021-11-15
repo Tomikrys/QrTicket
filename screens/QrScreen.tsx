@@ -1,17 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, useWindowDimensions, KeyboardAvoidingView, View } from 'react-native';
-
 import QrReader from './components/QrReader';
-import { Text, Input } from '@ui-kitten/components';
-
-import { NavigationContainer } from '@react-navigation/native';
+import { Text, Input, Spinner } from '@ui-kitten/components';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import TicketsScreen from '../screens/TicketsScreen';
 import ModalTicketValidator from './components/ModalTicketValidator';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 
+type Granted = { type: 'GRANTED' };
+type Denied = { type: 'DENIED' };
+type Loading = { type: 'LOADING' };
+
+type CameraState = Granted | Denied | Loading;
+
 export default function QrScreen({ticketType, markTicketAsUsed}) {
-  const [hasPermission, setHasPermission] = useState(false);
+
+  const [hasPermission, setHasPermission] = useState<CameraState>({ type: 'LOADING' });
   const DrawerR = createDrawerNavigator();
   const windowWidth = useWindowDimensions().width;
 
@@ -19,16 +23,24 @@ export default function QrScreen({ticketType, markTicketAsUsed}) {
     let permissionNeeded = true;
 
     BarCodeScanner.requestPermissionsAsync().then(({status}) => {
-      if (permissionNeeded) setHasPermission(status  === 'granted');
+      if (permissionNeeded) setHasPermission(status === 'granted' ? { type: 'GRANTED' } : { type: 'DENIED' } );
     });
 
     return () => { permissionNeeded = false };
   }, []);
 
-  if (!hasPermission) {
+  if (hasPermission.type === 'DENIED') {
     return (
       <View style={{ height: '100%', justifyContent: 'center' }}>
         <Text category='h4' style={{ textAlign: 'center' }}>Please allow Camera</Text>
+      </View>
+    );
+  }
+
+  if (hasPermission.type === 'LOADING') {
+    return (
+      <View style={{ flex: 1, height: '100%', justifyContent: 'center', alignItems: 'center' }}>
+        <Spinner size='giant' />
       </View>
     );
   }
