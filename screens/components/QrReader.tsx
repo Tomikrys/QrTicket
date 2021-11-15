@@ -2,16 +2,7 @@ import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import { Text, Card, Layout, Modal, Button, useTheme } from '@ui-kitten/components';
-
-const ticket_pieces = [
-  { column: "registration", name: "Registrace" },
-  { column: "dinner_fri", name: "Večeře pátek" },
-  { column: "breakfast_sat", name: "Snídaně sobota" },
-  { column: "lunch_sat", name: "Oběd sobota" },
-  { column: "dinner_sat", name: "Večeře sobota" },
-  { column: "breakfast_sun", name: "Snídaně neděle" },
-  { column: "snack_sun", name: "Balíček na cestu" },
-];
+import { getTicketTypes } from '../../components/Database';
 
 export default function QrReader({ itemToValidate, markAsUsed, hasPermission }) {
   const [scanned, setScanned] = useState(false);
@@ -101,6 +92,7 @@ function getTextForModal(user_data, ticketInterest) {
 
 function ScannedModal({ modalVisiblity, setModalVisiblity, setScanned, responseToModal, itemToValidate, markAsUsed, dataToModal }) {
   const theme = useTheme();
+  const ticket_pieces = getTicketTypes();
   // function ScannedModal() {
   // const [modalVisiblity, setModalVisiblity] = useState(false);
   return (
