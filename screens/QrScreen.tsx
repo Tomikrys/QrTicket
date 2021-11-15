@@ -20,7 +20,7 @@ export default function QrScreen({ticketType, markTicketAsUsed}) {
   function CustomDrawerContent(props) {
     return (
       <KeyboardAvoidingView style={{flex:1}} behavior='height' keyboardVerticalOffset={40}>
-        <TicketsScreen />
+        <TicketsScreen onSelectTicket={(t) => console.log(t)} />
       </KeyboardAvoidingView>
     );
   }
@@ -60,7 +60,7 @@ function ManualValidation() {
         value={value}
         autoCapitalize='characters'
         autoCorrect={false}
-        placeholder='Scan QR'
+        placeholder='Type QR code'
         status='control'
         size='large'
         maxLength={10}

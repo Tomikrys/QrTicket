@@ -1,26 +1,61 @@
 let _isLoggedIn = false;
+let _isAdmin = false;
+let _allTickets = [];
+let _allTicketsTypes = [];
 
-export function getTicketTypes() {
-  return [
-    { key: 'registration', title: 'Registrace'}, 
-    { key: "dinner_fri", title: "Večeře pátek" },
-    { key: "breakfast_sat", title: "Snídaně sobota" },
-    { key: "lunch_sat", title: "Oběd sobota" },
-    { key: "dinner_sat", title: "Večeře sobota" },
-    { key: "breakfast_sun", title: "Snídaně neděle" },
-    { key: "snack_sun", title: "Balíček na cestu" }
-  ];
+function fetchAllTickets() {
+    fetch('https://sjezd-qr-ticket.herokuapp.com/get/all_tickets')
+      .then((res) => res.json())
+      .then((data) => {
+        _allTickets = data.message;
+      })
+      .catch(function (error) {
+        _allTickets = [];
+        alert('Connection to database error: ' + error);
+      });
 }
 
-export function getTicketValuesFor(ticketType: string) {
-  switch (ticketType) {
-    case 'Breakfast':
+function fetchAllTicketsTypes() {
+    fetch('https://sjezd-qr-ticket.herokuapp.com/get/all_interests') // TODO
+      .then((res) => res.json())
+      .then((data) => {
+        _allTicketsTypes = data.message;
+      })
+      .catch(function (error) {
+        _allTicketsTypes = [];
+        alert('Connection to database error: ' + error);
+      });
+}
+
+export function getTicketTypes() {
+  if(_allTicketsTypes.length == 0) {
+    fetchAllTicketsTypes();
+  }
+
+  // TODO filter from database
+  _allTicketsTypes = [
+    { key: 'registration', title: 'Registration'}, 
+    { key: 'dinner_fri', title: 'Dinner friday' },
+    { key: 'breakfast_sat', title: 'Breakfast saturday' },
+    { key: 'lunch_sat', title: 'Lunch saturday' },
+    { key: 'dinner_sat', title: 'Dinner saturday' },
+    { key: 'breakfast_sun', title: 'Breakfast sunday' },
+    { key: 'snack_sun', title: 'Snack sunday' }
+  ];
+
+  return _allTicketsTypes;
+}
+
+export function getTicketValuesFor(ticketTypeKey: string) {
+  // TODO from database
+  switch (ticketTypeKey) {
+    case 'breakfast_sat':
       return ['eggs', 'hotdog'];
-    case 'Lunch':
+    case 'lunch_sat':
       return ['meal', 'vegetable'];
-    case 'Dinner':
+    case 'dinner_sat':
       return ['cake', 'meal'];
-    case 'Drink':
+    case 'snack_sun':
       return ['beer', 'water'];
     default:
       return [];
@@ -28,31 +63,34 @@ export function getTicketValuesFor(ticketType: string) {
 }
 
 export function getListOfTickets() {
-  return [
-    {
-        title: 'Karel Novak',
-        description: 'TICKET ID 0001'
-    },
-    {
-        title: 'Pavel Mrazek',
-        description: 'TICKET ID 0002'
-    },
-    {
-        title: 'Filip Kadlcak',
-        description: 'TICKET ID 0003'
-    }
-  ]
+  if(_allTickets.length == 0) {
+    fetchAllTickets();
+  }
+
+  return _allTickets;
 }
 
 export function isLoggedIn() {
   return _isLoggedIn;
 }
 
+export function isAdmin() {
+  return _isAdmin;
+}
+
 export function validateEntryCode(code: string) {
-  if(code == '')
+  const adminCode = '1234'; // FIXME admin code from database
+
+  if(code == '' || code == adminCode) { 
     _isLoggedIn = true;
-  else
+    _isAdmin = false;
+    if(code == adminCode) {
+      _isAdmin = true;
+    }
+  } else {
+    _isAdmin = false;
     _isLoggedIn = false;
+  }
 
   return isLoggedIn();
 }

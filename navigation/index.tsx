@@ -25,7 +25,8 @@ export default function Navigator() {
   )
 
   return (
-  <NavigationContainer onStateChange={(state) => console.log('New state is', state)}>
+  //  onStateChange={(state) => console.log('New state is', state)}
+  <NavigationContainer>
     <DrawerL.Navigator initialRouteName='LoginScreen' backBehavior='initialRoute' drawerContent={Settings} screenOptions={{ drawerPosition: 'left', drawerStyle: { width: '90%' }, headerShown: false}}>
       <DrawerL.Screen
         name='LoginScreen'

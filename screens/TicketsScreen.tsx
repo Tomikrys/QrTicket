@@ -1,40 +1,62 @@
 import React from 'react';
-import { getListOfTickets } from '../components/Database';
-import { Button, Divider, Input, Icon, List, ListItem, TopNavigation } from '@ui-kitten/components';
+import { getListOfTickets, isAdmin } from '../components/Database';
+import { Button, Text, Divider, Input, Icon, List, ListItem, TopNavigation } from '@ui-kitten/components';
 import { TouchableWithoutFeedback, StyleSheet, View } from 'react-native';
 
 import ModalTicketEditor from './components/ModalTicketEditor';
 
-export default function TicketsScreen() {
+export default function TicketsScreen({onSelectTicket}) {
 
-  const [visible, setVisible] = React.useState(false);
+  const [editorVisible, setEditorVisible] = React.useState(false);
+  const [selectedTicket, selectTicket] = React.useState(null);
+  const allTickets = getListOfTickets();
+  const [searchedTickets, setSearchedTickets] = React.useState(allTickets);
 
   const renderItemIcon = (props) => (
     <Icon {...props} name='person'/>
   );
 
-  const renderItemEdit = (props) => (
-    <Button size='tiny' onPress={() => setVisible(true)}>EDIT</Button>
+  const renderItemEdit = (props, item) => (
+    <Button size='medium' status='info' style={styles.editButton} onPress={() => {selectTicket(item); setEditorVisible(true);}}>Open in editor</Button>
   );
 
   const renderItem = ({ item, index }) => (
       <ListItem
-          key={index}
-        title={item.title}
-        description={item.description}
+        key={index}
+        title={() => <Text style={styles.listItemTitle}>{item.name}</Text>}
+        description={item.ID}
         accessoryLeft={renderItemIcon}
-        accessoryRight={renderItemEdit}
+        accessoryRight={(props) => isAdmin() ? renderItemEdit(props, item) : <></>}
+        onPress={() => {selectTicket(item); onSelectTicket(item);}}
         style={styles.listItem}
-    />
+      />
   );
 
-  const tickets = getListOfTickets();
+  return (
+    <View style={{flex:1}}>
+      <TopNavigation 
+        title={() => <Text style={{flex: 1, textAlign: 'center', fontSize: 20}}>List of tickets</Text>}
+      />
+      <Divider/>
+      <List
+              style={styles.list}
+              data={searchedTickets}
+              renderItem={renderItem}
+              ListEmptyComponent={<Text style={styles.emptyListText}>No tickets found!</Text>}
+      />
+      {(isAdmin() && selectedTicket != null) ? <ModalTicketEditor selectedTicket={selectedTicket} onClose={() => setEditorVisible(false)} visible={editorVisible} /> : <></>}
+      <Divider/>
+      <SearchBar setSearchedTickets={setSearchedTickets} allTickets={allTickets} />
+    </View>
+  );
+};
 
-  function SearchBar() {
+function SearchBar({setSearchedTickets, allTickets}) {
     const [value, setValue] = React.useState('');
 
     const clearSearchBar = () => {
       setValue('');
+      setSearchedTickets(allTickets);
     };
 
     const renderIcon = (props) => (
@@ -42,6 +64,15 @@ export default function TicketsScreen() {
         <Icon {...props} name={'close-outline'}/>
       </TouchableWithoutFeedback>
     );
+
+    const onChangeText = (nextValue) => {
+      setValue(nextValue);
+      if(nextValue == '') {
+        setSearchedTickets(allTickets);
+      } else {
+        setSearchedTickets(allTickets.filter(ticket => ticket.name.toLowerCase().includes(nextValue.toLowerCase()) || ticket.ID.toLowerCase().includes(nextValue.toLowerCase())));
+      }
+    };
 
     return (
       <Input
@@ -52,41 +83,38 @@ export default function TicketsScreen() {
         style={styles.searchBar}
         clearButtonMode='while-editing'
         accessoryRight={renderIcon}
-        onChangeText={nextValue => setValue(nextValue)}
+        onChangeText={onChangeText}
       />
     );
-  }
-
-  return (
-    <View style={{flex:1}}>
-      <TopNavigation title='List of tickets' />
-      <Divider/>
-      <List
-              style={styles.list}
-              data={tickets}
-              renderItem={renderItem}
-      />
-      <ModalTicketEditor user={tickets[0].title} desc={tickets[0].description} setVisible={setVisible} visible={visible} />
-      <Divider/>
-      <SearchBar/>
-    </View>
-  );
-};
+}
 
 const styles = StyleSheet.create({
   list: {
     width: '100%',
     backgroundColor: '#f4f4f4',
+    padding: 15,
   },
   listItem: {
-    backgroundColor: '#f4f4f4',
+    margin: 5,
+    borderRadius: 15,
+  },
+  listItemTitle: {
+    fontSize: 20
+  },
+  editButton: {
+    borderRadius: 40,
+  },
+  emptyListText: {
+    fontSize: 40,
+    marginTop: '20%',
+    alignSelf: 'center'
   },
   searchBar: {
     backgroundColor: '#fff',
     padding: 10,
     color: '#000',
     borderColor: '#aaa',
-    borderRadius: 24,
+    borderRadius: 15,
     alignItems: 'center',
     justifyContent: 'center'
   },

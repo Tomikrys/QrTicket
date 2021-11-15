@@ -2,11 +2,11 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Button, Text, Modal, Card } from '@ui-kitten/components';
 
-export default function ModalTicketEditor(properties) {
+export default function ModalTicketEditor({selectedTicket, onClose, visible}) {
   const Header = (props) => (
     <View {...props}>
-      <Text category='h3'>{properties.user}</Text>
-      <Text category='s1'>{properties.desc}</Text>
+      <Text category='h3'>{selectedTicket.name}</Text>
+      <Text category='s1'>{selectedTicket.ID}</Text>
     </View>
   );
 
@@ -16,13 +16,14 @@ export default function ModalTicketEditor(properties) {
         style={styles.footerControl}
         size='small'
         status='basic'
-        onPress={() => properties.setVisible(false)}>
+        onPress={onClose}>
         CANCEL
       </Button>
       <Button
         style={styles.footerControl}
         size='small'
-        onPress={() => properties.setVisible(false)}>
+        status='info'
+        onPress={onClose}>
         UPDATE
       </Button>
     </View>
@@ -40,7 +41,7 @@ export default function ModalTicketEditor(properties) {
 
   return (
     <Modal
-      visible={properties.visible}
+      visible={visible}
       backdropStyle={styles.backdrop}>
       <CardAccessoriesShowcase />
     </Modal>
