@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, useWindowDimensions, KeyboardAvoidingView, View } from 'react-native';
 import QrReader from './components/QrReader';
-import { Text, Input, Spinner } from '@ui-kitten/components';
+import { Text, Input, Spinner, Button } from '@ui-kitten/components';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import TicketsScreen from '../screens/TicketsScreen';
 import ModalTicketValidator from './components/ModalTicketValidator';
@@ -33,6 +33,11 @@ export default function QrScreen({ticketType, markTicketAsUsed}) {
     return (
       <View style={{ height: '100%', justifyContent: 'center' }}>
         <Text category='h4' style={{ textAlign: 'center' }}>Please allow Camera</Text>
+        <Button onPress={() => {
+          BarCodeScanner.requestPermissionsAsync().then(({status}) => {
+            setHasPermission(status === 'granted' ? { type: 'GRANTED' } : { type: 'DENIED' } );
+          });
+        }}>Done</Button>
       </View>
     );
   }
