@@ -1,62 +1,74 @@
 import React from 'react';
-import { View } from '../components/Themed';
-import { Button, Divider, Input, Icon, List, ListItem, TopNavigation, TopNavigationAction, Layout, Card, Modal, Text, Toggle, IndexPath, Drawer, DrawerItem } from '@ui-kitten/components';
-import { TouchableWithoutFeedback, StyleSheet } from 'react-native';
+import { BottomNavigation, BottomNavigationTab, Icon, Text, Divider, TopNavigation, Card } from '@ui-kitten/components';
+import { ScrollView, View, StyleSheet } from 'react-native';
+import { getTicketTypes } from '../components/Database';
 
-export default function SettingsScreen({itemToValidate, setItemToValidate, setMarkAsUsed}) {
+export default function SettingsScreen({ticketType, markTicketAsUsed, setTicketType, setMarkTicketAsUsed}) {
 
-    const ticket_pieces = [
-        { column: "registration", name: "Registrace" },
-        { column: "dinner_fri", name: "Večeře pátek" },
-        { column: "breakfast_sat", name: "Snídaně sobota" },
-        { column: "lunch_sat", name: "Oběd sobota" },
-        { column: "dinner_sat", name: "Večeře sobota" },
-        { column: "breakfast_sun", name: "Snídaně neděle" },
-        { column: "snack_sun", name: "Balíček na cestu" },
-    ]
+    const ticketTypes = getTicketTypes();
 
-    const indexToColumnName = (index) => {
-        return ticket_pieces[index-1].column;
-    };
+    if (ticketType.key == null && ticketTypes.length) {
+      setTicketType(ticketTypes[0]);
+    }
 
+    const ValidateIcon = (props) => (
+      <Icon {...props} name='eye-outline'/>
+    );
 
-
-    // ticket_pieces.find(o => o.column === "registration").name
-
-
-    // toggle
-    const [validate, setValidate] = React.useState(true);
-    const onValidateChange = (validate) => {
-        setValidate(validate);
-        setMarkAsUsed(validate);
-    };
-
-    // drawer
-    const [selectedItemIndex, setSelectedItemIndex] = React.useState(new IndexPath(0));
+    const CheckInIcon = (props) => (
+      <Icon {...props} name='checkmark-circle-2-outline'/>
+    );
 
     return (
-
-        <>
-
-            {/* <TopNavigation
-                title='Settings'
-            /> */}
-            <Toggle checked={validate} onChange={onValidateChange}>
-                {`Validate: ${validate}`}
-            </Toggle>
-            <Drawer
-                selectedIndex={selectedItemIndex}
-                onSelect={index => {
-                    setSelectedItemIndex(index);
-                    setItemToValidate(indexToColumnName(index));
-                }}>
-                {ticket_pieces.map((type, index) =>
-                    <DrawerItem key={index} title={type.name} />
-                )}
-            </Drawer>
-        </>
+        <View style={styles.container}>
+            <TopNavigation
+                title={() => <Text style={{flex: 1, textAlign: 'center', fontSize: 20}}>Choose ticket type to scan</Text>}
+            />
+            <Divider />
+            <ScrollView contentContainerStyle={styles.cardBoxContent}>
+            {ticketTypes.map((obj, idx) =>
+              <Card key={obj.key} style={[styles.card, ticketType.key == obj.key ? styles.cardSelected : null]} onPress={() => { setTicketType(obj); }}>
+                <Text style={styles.cardText}>{obj.title}</Text>
+              </Card>
+            )}
+            </ScrollView>
+            <Divider />
+            <BottomNavigation
+              selectedIndex={markTicketAsUsed}
+              onSelect={setTicketType}
+              indicatorStyle={{backgroundColor: '#cdf', color: 'white', height: '130%'}}
+            >
+              <BottomNavigationTab title='Only validate' icon={ValidateIcon}/>
+              <BottomNavigationTab title='Also mark as used' icon={CheckInIcon}/>
+            </BottomNavigation>
+        </View>
     );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    width: '100%',
+    justifyContent: 'center'
+  },
+  cardBoxContent: {
+    justifyContent: 'center',
+    flex: 1,
+    width: '100%',
+    backgroundColor: '#eee'
+  },
+  cardText: {
+    textAlign: 'center',
+    fontSize: 25
+  },
+  card: {
+    width: '90%',
+    margin: 10,
+    justifyContent: 'center',
+    alignSelf: 'center',
+    borderRadius: 15
+  },
+  cardSelected: {
+    backgroundColor: '#cdf'
+  }
 });

@@ -1,7 +1,7 @@
 let _isLoggedIn = false;
 
 export function getTicketTypes() {
-  return ['Breakfast', 'Lunch', 'Dinner', 'Drink'];
+  return [{key: 'breakfast', title: 'Breakfast'}, {key: 'lunch', title: 'Lunch'}, {key: 'dinner', title: 'Dinner'}, {key: 'drink', title: 'Drink'}];
 }
 
 export function getTicketValuesFor(ticketType: string) {

@@ -2,19 +2,19 @@ import React from 'react';
 import { StyleSheet, useWindowDimensions, KeyboardAvoidingView, View } from 'react-native';
 
 import QrReader from './components/QrReader';
-import { Input } from '@ui-kitten/components';
+import { Text, Input } from '@ui-kitten/components';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import TicketsScreen from '../screens/TicketsScreen';
 import ModalTicketValidator from './components/ModalTicketValidator';
 
-export default function QrScreen({itemToValidate, markAsUsed}) {
+export default function QrScreen({ticketType, markTicketAsUsed}) {
   const DrawerR = createDrawerNavigator();
   const windowWidth = useWindowDimensions().width;
 
   const Content = () => (
-    <QrScreenContent itemToValidate={itemToValidate} markAsUsed={markAsUsed}/>
+    <QrScreenContent ticketType={ticketType} markTicketAsUsed={markTicketAsUsed}/>
   )
 
   function CustomDrawerContent(props) {
@@ -26,7 +26,7 @@ export default function QrScreen({itemToValidate, markAsUsed}) {
   }
 
   return (
-    <DrawerR.Navigator initialRouteName='QRScreen' backBehavior='initialRoute' screenOptions={{ drawerPosition: 'right', drawerStyle: { width: '90%' } }} drawerContent={(props) => <CustomDrawerContent {...props} />}>
+    <DrawerR.Navigator initialRouteName='QRScreen' backBehavior='initialRoute' screenOptions={{ drawerPosition: 'right', drawerStyle: { width: '90%' }, headerShown: false}} drawerContent={(props) => <CustomDrawerContent {...props} />}>
       <DrawerR.Screen
         name='QRScreen'
         component={Content}
@@ -36,12 +36,13 @@ export default function QrScreen({itemToValidate, markAsUsed}) {
   );
 }
 
-function QrScreenContent({itemToValidate, markAsUsed}) {
+function QrScreenContent({ticketType, markTicketAsUsed}) {
   return (
     <View style={styles.container}>
-      <QrReader itemToValidate={itemToValidate} markAsUsed={markAsUsed}/>
+      <QrReader itemToValidate={ticketType.key} markAsUsed={markTicketAsUsed}/>
       <ManualValidation />
       <ModalTicketValidator />
+      <Text style={{fontSize: 30, width: '100%', textAlign: 'center', marginBottom: 30}}>{ticketType.title}</Text>
     </View>
   );
 }

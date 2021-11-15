@@ -13,17 +13,15 @@ export default function Navigator() {
   const DrawerL = createDrawerNavigator();
   const windowWidth = useWindowDimensions().width;
 
-  // is set from settings screen --- TODO vyresit aby nebylo natvrdo registration ale prvni ze seznamu
-  const [itemToValidate, setItemToValidate] = React.useState("registration");
-  // bool if the ticked should be marked as used
-  const [markAsUsed, setMarkAsUsed] = React.useState(true);
+  const [ticketType, setTicketType] = React.useState({key: null, title: 'No selected ticket type'});
+  const [markTicketAsUsed, setMarkTicketAsUsed] = React.useState(0);
 
   const QrScreenContent = () => (
-    <QrScreen itemToValidate={itemToValidate} markAsUsed={markAsUsed}/>
+    <QrScreen ticketType={ticketType} markTicketAsUsed={markTicketAsUsed}/>
   )
 
   const Settings = () => (
-    <SettingsScreen itemToValidate={itemToValidate} setItemToValidate={setItemToValidate} setMarkAsUsed={setMarkAsUsed}/>
+    <SettingsScreen ticketType={ticketType} markTicketAsUsed={markTicketAsUsed} setTicketType={setTicketType} setMarkTicketAsUsed={setMarkTicketAsUsed}/>
   )
 
   return (
