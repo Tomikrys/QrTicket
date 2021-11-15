@@ -4,7 +4,7 @@ import { BarCodeScanner } from 'expo-barcode-scanner';
 import { Card, Layout, Modal, Button } from '@ui-kitten/components';
 
 export default function QrReader({ itemToValidate, markAsUsed }) {
-  const [hasPermission, setHasPermission] = useState(null);
+  const [hasPermission, setHasPermission] = useState(false);
   const [scanned, setScanned] = useState(false);
   const [modalVisiblity, setModalVisiblity] = useState(false);
   //response which is used by modal but not shown
@@ -13,10 +13,13 @@ export default function QrReader({ itemToValidate, markAsUsed }) {
   const [dataToModal, setDataToModal] = useState([""]);
 
   useEffect(() => {
-    (async () => {
-      const { status } = await BarCodeScanner.requestPermissionsAsync();
-      setHasPermission(status === 'granted');
-    })();
+    let permissionNeeded = true;
+
+    BarCodeScanner.requestPermissionsAsync().then(({status}) => {
+      if (permissionNeeded) setHasPermission(status  === 'granted');
+    });
+
+    return () => { permissionNeeded = false };
   }, []);
 
 
