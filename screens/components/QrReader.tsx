@@ -80,13 +80,13 @@ function getTextForModal(user_data, ticketInterest) {
 
   switch (res) {
     case 'used':
-      return ["warning", "Vstupenka již byla odbavena dříve!", user_data?.name ]
+      return ["warning", "Vstupenka již byla odbavena dříve!", user_data?.name, user_data[ticketInterest] ]
     case 'ok':
-      return ["success", "Vstupenka odbavena.", user_data?.name ]
+      return ["success", "Vstupenka odbavena.", user_data?.name, user_data[ticketInterest] ]
     case 'not':
-      return ["info", "Nezakoupeno!", user_data?.name ]
+      return ["info", "Nezakoupeno!", user_data?.name, user_data[ticketInterest] ]
     default:
-      return ["danger", "Nastala chyba", user_data?.name ]
+      return ["danger", "Nastala chyba", user_data?.name, user_data[ticketInterest] ]
   }
 }
 
@@ -98,29 +98,34 @@ function ScannedModal({ modalVisiblity, setModalVisiblity, setScanned, responseT
   return (
     <Layout style={styles.container} level='1'>
       <Modal visible={modalVisiblity} style={styles.modalContainer}>
-        <Card disabled={true} style={[styles.modalWindow, { backgroundColor: theme[`color-${dataToModal[0]}-200`], borderColor: theme[`color-${dataToModal[0]}-400`] }]}>
+        <View style={[styles.modalWindow, { backgroundColor: theme[`color-${dataToModal[0]}-200`], borderColor: theme[`color-${dataToModal[0]}-default`] }]}>
           {dataToModal ?
             <React.Fragment>
               <Text 
-                category='h3'
+                category='h2'
+                style={[ styles.title , { backgroundColor: theme[`color-${dataToModal[0]}-default`] } ]}
               >{ dataToModal[1] }</Text>
-              <View style={{ height: 2, width: '100%', backgroundColor: theme[`color-${dataToModal[0]}-400`] }}></View>
-              <Text category='h4' >{ dataToModal[2] }</Text>
-              {ticket_pieces && <Text>{ ticket_pieces.find(item => item.column === itemToValidate)?.name }</Text>}
+              <View style={{ paddingStart: 5 }}>
+                <Text category='h3' >{ dataToModal[2] }</Text>
+                {ticket_pieces && <Text category='h5'>{ ticket_pieces.find(item => item.key === itemToValidate)?.title } - {dataToModal[3]}</Text>}
+              </View>
             </React.Fragment>
             :
             <Text>Loading</Text>
           }
-          <Button 
-            style={{marginTop: 10}}
-            status='primary'
-            onPress={() => {
-            setModalVisiblity(false);
-            setScanned(false);
-          }}>
-            Zavřít
-          </Button>
-        </Card>
+          <View style={[ styles.spacer, { backgroundColor: theme[`color-${dataToModal[0]}-default`] } ]}></View>
+          <View style={{ alignItems: 'center'}}>
+            <Button 
+              style={{marginBottom: 5, width: '60%'}}
+              status='primary'
+              onPress={() => {
+              setModalVisiblity(false);
+              setScanned(false);
+            }}>
+              Zavřít
+            </Button>
+          </View>
+        </View>
       </Modal>
 
     </Layout>
@@ -172,6 +177,20 @@ const styles = StyleSheet.create({
     justifyContent: 'center' 
   },
   modalWindow: {
-    borderWidth: 2
+    borderWidth: 2,
+    borderRadius: 5,
+    width: '90%'
+  },
+  spacer: { 
+    height: 2, 
+    width: '95%', 
+    alignSelf: 'center', 
+    marginBottom: 5, 
+    marginTop: 5 
+  },
+  title: { 
+    color: 'white', 
+    padding: 3, 
+    paddingStart: 10 
   }
 });
