@@ -35,6 +35,7 @@ export default function TicketsScreen({onSelectTicket}) {
   return (
     <View style={{flex:1}}>
       <TopNavigation 
+        style={{elevation: 5}}
         title={() => <Text style={{flex: 1, textAlign: 'center', fontSize: 20}}>List of tickets</Text>}
       />
       <Divider/>
@@ -46,7 +47,9 @@ export default function TicketsScreen({onSelectTicket}) {
       />
       {(isAdmin() && selectedTicket != null) ? <ModalTicketEditor selectedTicket={selectedTicket} onClose={() => setEditorVisible(false)} visible={editorVisible} /> : <></>}
       <Divider/>
-      <SearchBar setSearchedTickets={setSearchedTickets} allTickets={allTickets} />
+      <View style={{ elevation: 5 }}>
+        <SearchBar setSearchedTickets={setSearchedTickets} allTickets={allTickets} />
+      </View>
     </View>
   );
 };

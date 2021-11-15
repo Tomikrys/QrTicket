@@ -76,10 +76,10 @@ export default function QrScreen({ticketType, markTicketAsUsed}) {
 function QrScreenContent({ticketType, markTicketAsUsed, hasPermission}) {
   return (
     <View style={styles.container}>
+      <Text style={{position: 'absolute', top: 0, zIndex: 100, fontSize: 30, width: '100%', textAlign: 'center', padding: 7, backgroundColor: 'white' }}>{ticketType.title}</Text>
       <QrReader itemToValidate={ticketType.key} markAsUsed={markTicketAsUsed} hasPermission={hasPermission} />
       <ManualValidation />
       <ModalTicketValidator />
-      <Text style={{fontSize: 30, width: '100%', textAlign: 'center', marginBottom: 30}}>{ticketType.title}</Text>
     </View>
   );
 }
@@ -97,7 +97,7 @@ function ManualValidation() {
         value={value}
         autoCapitalize='characters'
         autoCorrect={false}
-        placeholder='Type QR code'
+        placeholder='or Type QR code'
         status='control'
         size='large'
         maxLength={10}
@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
   },
   searchBox: {
     backgroundColor: 'transparent',
-    height: '70%',
+    height: '80%',
     justifyContent: 'flex-end'
   },
   searchBar: {

@@ -23,6 +23,7 @@ export default function SettingsScreen({ticketType, markTicketAsUsed, setTicketT
     return (
         <View style={styles.container}>
             <TopNavigation
+                style={{ elevation: 5 }}
                 title={() => <Text style={{flex: 1, textAlign: 'center', fontSize: 20 }}>Choose ticket type to scan</Text>}
             />
             <Divider />
@@ -38,6 +39,7 @@ export default function SettingsScreen({ticketType, markTicketAsUsed, setTicketT
               selectedIndex={markTicketAsUsed}
               onSelect={setTicketType}
               indicatorStyle={{ backgroundColor: theme['color-primary-200'], height: '130%' }}
+              style={{ elevation: 5 }}
             >
               <BottomNavigationTab title='Only validate' icon={ValidateIcon}/>
               <BottomNavigationTab title='Also mark as used' icon={CheckInIcon}/>
