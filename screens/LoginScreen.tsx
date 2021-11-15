@@ -34,7 +34,7 @@ export default function LoginScreen({ navigation }) {
       textStyle={styles.inputText}
       onFocus={clearEntryCode}
       onChangeText={nextValue => setEntryCode(nextValue)}
-      onSubmitEditing={() => confirmLogIn()} />
+      onSubmitEditing={confirmLogIn} />
   );
 
   return (

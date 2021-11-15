@@ -6,67 +6,40 @@ import LoginScreen from '../screens/LoginScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 
 import { NavigationContainer } from '@react-navigation/native';
-import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer';
-import { KeyboardAvoidingView } from 'react-native';
-
-/*const RootNavigator = createStackNavigator({
-  Login: { screen: QrScreen ,
-           navigationBarStyle : {navBarHidden: true },
-           navigationOptions: {
-           headerShown: false,
-           }
-  },
-  AfterLogin: { screen: MyDrawerNavigator,
-    navigationBarStyle : {navBarHidden: true },
-    navigationOptions: {
-      headerShown: false,
-    } },
-});*/
-
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import { useWindowDimensions } from 'react-native';
 
 export default function Navigator() {
-  const Drawer = createDrawerNavigator();
+  const DrawerL = createDrawerNavigator();
+  const windowWidth = useWindowDimensions().width;
 
   // is set from settings screen --- TODO vyresit aby nebylo natvrdo registration ale prvni ze seznamu
   const [itemToValidate, setItemToValidate] = React.useState("registration");
   // bool if the ticked should be marked as used
   const [markAsUsed, setMarkAsUsed] = React.useState(true);
 
-  const screen = () => (
+  const QrScreenContent = () => (
     <QrScreen itemToValidate={itemToValidate} markAsUsed={markAsUsed}/>
   )
 
-  function CustomDrawerContent(props) {
-  /*
-        <DrawerContentScrollView {...props}>
-          <DrawerItemList {...props} />
-        </DrawerContentScrollView>
-  */
-// <TicketsScreen />
-    return (
-      <KeyboardAvoidingView style={{flex:1}} behavior='height' keyboardVerticalOffset={40}>
-        <SettingsScreen itemToValidate={itemToValidate} setItemToValidate={setItemToValidate} setMarkAsUsed={setMarkAsUsed}/>
-      </KeyboardAvoidingView>
-    );
-  }
+  const Settings = () => (
+    <SettingsScreen itemToValidate={itemToValidate} setItemToValidate={setItemToValidate} setMarkAsUsed={setMarkAsUsed}/>
+  )
 
   return (
-  <NavigationContainer>
-    <Drawer.Navigator initialRouteName='LoginScreen' backBehavior='initialRoute' drawerContent={(props) => <CustomDrawerContent {...props} />} screenOptions={{ drawerStyle: { width: '90%' },
-    header: ({ navigation, route, options }) => {
-  return (<></>); // TODO
-} }}>
-      <Drawer.Screen
-        name="LoginScreen"
+  <NavigationContainer onStateChange={(state) => console.log('New state is', state)}>
+    <DrawerL.Navigator initialRouteName='LoginScreen' backBehavior='initialRoute' drawerContent={Settings} screenOptions={{ drawerPosition: 'left', drawerStyle: { width: '90%' }, headerShown: false}}>
+      <DrawerL.Screen
+        name='LoginScreen'
         component={LoginScreen}
-        options={{ drawerLabel: 'LoginScreen', swipeEdgeWidth: 0 }}
+        options={{ drawerLabel: 'LoginScreen', swipeEdgeWidth: 0, gestureEnabled: false }}
       />
-      <Drawer.Screen
-        name="QrScreen"
-        component={screen}
-        options={{ drawerLabel: 'QrScreen', swipeEdgeWidth: 10000 }}
+      <DrawerL.Screen
+        name='QrScreen'
+        component={QrScreenContent}
+        options={{ drawerLabel: 'QrScreen', swipeEdgeWidth: windowWidth/2 }}
       />
-    </Drawer.Navigator>
+    </DrawerL.Navigator>
   </NavigationContainer>
   );
 }
