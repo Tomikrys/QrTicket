@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import { Text, Card, Layout, Modal, Button, useTheme } from '@ui-kitten/components';
@@ -13,25 +13,13 @@ const ticket_pieces = [
   { column: "snack_sun", name: "Balíček na cestu" },
 ];
 
-export default function QrReader({ itemToValidate, markAsUsed }) {
-  const [hasPermission, setHasPermission] = useState(false);
+export default function QrReader({ itemToValidate, markAsUsed, hasPermission }) {
   const [scanned, setScanned] = useState(false);
   const [modalVisiblity, setModalVisiblity] = useState(false);
   //response which is used by modal but not shown
   const [responseToModal, setResponseToModal] = useState(null);
   //data shown in modal
   const [dataToModal, setDataToModal] = useState([""]);
-
-  useEffect(() => {
-    let permissionNeeded = true;
-
-    BarCodeScanner.requestPermissionsAsync().then(({status}) => {
-      if (permissionNeeded) setHasPermission(status  === 'granted');
-    });
-
-    return () => { permissionNeeded = false };
-  }, []);
-
 
   //fetch all data about one user - user ID is data scanned from QR code
   const fetchUserData = (user) => {
@@ -54,14 +42,6 @@ export default function QrReader({ itemToValidate, markAsUsed }) {
     fetchUserData(data);
     // alert(`Bar code with type ${type} and data ${data} has been scanned! Chosen ${itemToValidate} doslo zpet ${JSON.stringify(responseToModal)}`);
   };
-
-  if (hasPermission === null) {
-    return <Text>Requesting for camera permission</Text>;
-  }
-  if (hasPermission === false) {
-    return <Text>No access to camera</Text>;
-  }
-
 
   return (
     <View style={styles.container}>
