@@ -1,7 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
-import { Card, Layout, Modal, Button } from '@ui-kitten/components';
+import { Text, Card, Layout, Modal, Button, useTheme } from '@ui-kitten/components';
+
+const ticket_pieces = [
+  { column: "registration", name: "Registrace" },
+  { column: "dinner_fri", name: "Večeře pátek" },
+  { column: "breakfast_sat", name: "Snídaně sobota" },
+  { column: "lunch_sat", name: "Oběd sobota" },
+  { column: "dinner_sat", name: "Večeře sobota" },
+  { column: "breakfast_sun", name: "Snídaně neděle" },
+  { column: "snack_sun", name: "Balíček na cestu" },
+];
 
 export default function QrReader({ itemToValidate, markAsUsed }) {
   const [hasPermission, setHasPermission] = useState(false);
@@ -96,39 +106,47 @@ function validateTicket(user_data, ticketInterest) {
 
 function getTextForModal(user_data, ticketInterest) {
   let res = validateTicket(user_data, ticketInterest);
-  if (res == "used") {
-    return ["yellow", "Vstupenka již byla odbavena dříve!"]
-  } else if (res == "ok") {
-    return ["green", "Vstupenka odbavena."]
-  } else if (res == "not") {
-    return ["orange", "Nezakoupeno!"]
-  } else {
-    return ["red", "Nastala chyba"]
+
+  switch (res) {
+    case 'used':
+      return ["warning", "Vstupenka již byla odbavena dříve!", user_data?.name ]
+    case 'ok':
+      return ["success", "Vstupenka odbavena.", user_data?.name ]
+    case 'not':
+      return ["info", "Nezakoupeno!", user_data?.name ]
+    default:
+      return ["danger", "Nastala chyba", user_data?.name ]
   }
 }
 
 function ScannedModal({ modalVisiblity, setModalVisiblity, setScanned, responseToModal, itemToValidate, markAsUsed, dataToModal }) {
+  const theme = useTheme();
   // function ScannedModal() {
   // const [modalVisiblity, setModalVisiblity] = useState(false);
   return (
     <Layout style={styles.container} level='1'>
-      <Modal visible={modalVisiblity}>
-        <Card disabled={true}>
+      <Modal visible={modalVisiblity} style={styles.modalContainer}>
+        <Card disabled={true} style={[styles.modalWindow, { backgroundColor: theme[`color-${dataToModal[0]}-200`], borderColor: theme[`color-${dataToModal[0]}-400`] }]}>
           {dataToModal ?
             <React.Fragment>
-              <Text>{itemToValidate}</Text>
-              <Text>TODO Barva ma byt - {dataToModal[0]} </Text>
-              <Text>{dataToModal[1]} </Text>
-              {/* <Text>Barva ma byt {dataToModal[0]} </Text> */}
+              <Text 
+                category='h3'
+              >{ dataToModal[1] }</Text>
+              <View style={{ height: 2, width: '100%', backgroundColor: theme[`color-${dataToModal[0]}-400`] }}></View>
+              <Text category='h4' >{ dataToModal[2] }</Text>
+              {ticket_pieces && <Text>{ ticket_pieces.find(item => item.column === itemToValidate)?.name }</Text>}
             </React.Fragment>
             :
             <Text>Loading</Text>
           }
-          <Button onPress={() => {
+          <Button 
+            style={{marginTop: 10}}
+            status='primary'
+            onPress={() => {
             setModalVisiblity(false);
             setScanned(false);
           }}>
-            CLOSE
+            Zavřít
           </Button>
         </Card>
       </Modal>
@@ -175,4 +193,13 @@ const styles = StyleSheet.create({
     flex: 2,
     backgroundColor: opacity
   },
+  modalContainer: { 
+    backgroundColor: 'rgba(255, 255, 255, 0.5)', 
+    width: '100%', height: '100%', 
+    alignItems: 'center', 
+    justifyContent: 'center' 
+  },
+  modalWindow: {
+    borderWidth: 2
+  }
 });
