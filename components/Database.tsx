@@ -1,7 +1,15 @@
 let _isLoggedIn = false;
 
 export function getTicketTypes() {
-  return [{key: 'breakfast', title: 'Breakfast'}, {key: 'lunch', title: 'Lunch'}, {key: 'dinner', title: 'Dinner'}, {key: 'drink', title: 'Drink'}];
+  return [
+    { key: 'registration', title: 'Registrace'}, 
+    { key: "dinner_fri", title: "Večeře pátek" },
+    { key: "breakfast_sat", title: "Snídaně sobota" },
+    { key: "lunch_sat", title: "Oběd sobota" },
+    { key: "dinner_sat", title: "Večeře sobota" },
+    { key: "breakfast_sun", title: "Snídaně neděle" },
+    { key: "snack_sun", title: "Balíček na cestu" }
+  ];
 }
 
 export function getTicketValuesFor(ticketType: string) {
