@@ -6,7 +6,7 @@ import { TouchableWithoutFeedback, StyleSheet, View } from 'react-native';
 import ModalTicketEditor from './components/ModalTicketEditor';
 import ModalQrCodeGenerator from './components/ModalQrCodeGenerator';
 
-export default function TicketsScreen({ onSelectTicket, manualValidation }) {
+export default function TicketsScreen({ manualValidation }: any) {
 
   const [editorVisible, setEditorVisible] = React.useState(false);
   const [selectedTicket, selectTicket] = React.useState(null);
@@ -15,35 +15,35 @@ export default function TicketsScreen({ onSelectTicket, manualValidation }) {
   const [qrGeneratorModalVisiblity, setQrGeneratorModalVisiblity] = React.useState(false);
   const [person, setPerson] = React.useState(null);
 
-  const renderItemIcon = (props) => (
+  const renderItemIcon = (props: any) => (
     <Icon {...props} name='person' />
   );
-  const EditIcon = (props) => (
+  const EditIcon = (props: any) => (
     <Icon {...props} name='edit-outline' />
   );
 
-  const ValidateIcon = (props) => (
+  const ValidateIcon = (props: any) => (
     <Icon {...props} name='person-done-outline' />
   );
 
 
-  const renderItemEditAndValidate = (props, item) => (
+  const renderItemEditAndValidate = (props: any, item: any) => (
     <>
       <Button size='small' status='info' accessoryLeft={EditIcon} style={styles.editButton} onPress={() => { selectTicket(item); setEditorVisible(true); }}></Button>
       <Button size='small' status='success' accessoryLeft={ValidateIcon} style={styles.editButton} onPress={() => { manualValidation(item.ID); }}></Button>
     </>
   );
-  const renderItemValidate = (props, item) => (
+  const renderItemValidate = (props: any, item: any) => (
     <Button size='small' status='success' accessoryLeft={ValidateIcon} style={styles.editButton} onPress={() => { manualValidation(item.ID); }}></Button>
   );
 
-  function onSelectTicketShowQr(item) {
+  function onSelectTicketShowQr(item: any) {
     setPerson(item);
     setQrGeneratorModalVisiblity(true);
 
   }
 
-  const renderItem = ({ item, index }) => (
+  const renderItem = ({ item, index }: any) => (
     <ListItem
       key={index}
       title={() => <Text style={styles.listItemTitle}>{item.name}</Text>}
@@ -80,7 +80,7 @@ export default function TicketsScreen({ onSelectTicket, manualValidation }) {
   );
 };
 
-function SearchBar({ setSearchedTickets, allTickets }) {
+function SearchBar({ setSearchedTickets, allTickets }: any) {
   const [value, setValue] = React.useState('');
 
   const clearSearchBar = () => {
@@ -88,20 +88,20 @@ function SearchBar({ setSearchedTickets, allTickets }) {
     setSearchedTickets(allTickets);
   };
 
-  const renderIcon = (props) => (
+  const renderIcon = (props: any) => (
     <TouchableWithoutFeedback onPress={clearSearchBar}>
       <Icon {...props} name={'close-outline'} />
     </TouchableWithoutFeedback>
   );
 
-  const onChangeText = (nextValue) => {
+  const onChangeText = (nextValue: any) => {
     setValue(nextValue);
     if (nextValue == '') {
       setSearchedTickets(allTickets);
     } else {
       setSearchedTickets(allTickets.filter(
         // ticket => removeDiacritics(ticket.name.toLowerCase()).includes(removeDiacritics(nextValue.toLowerCase())) ||
-        ticket => removeDiacritics(ticket.name.toLowerCase()).includes(removeDiacritics(nextValue.toLowerCase())) ||
+        (ticket: any) => removeDiacritics(ticket.name.toLowerCase()).includes(removeDiacritics(nextValue.toLowerCase())) ||
           ticket.ID.toLowerCase().includes(nextValue.toLowerCase()))
       );
     }
@@ -156,7 +156,7 @@ const styles = StyleSheet.create({
 });
 
 
-function removeDiacritics(str) {
+function removeDiacritics(str: any) {
   var defaultDiacriticsRemovalMap = [
     { 'base': 'a', 'letters': /[áä]/g },
     { 'base': 'c', 'letters': /[č]/g },

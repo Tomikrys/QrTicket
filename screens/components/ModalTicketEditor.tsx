@@ -2,15 +2,15 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Button, Text, Modal, Card } from '@ui-kitten/components';
 
-export default function ModalTicketEditor({selectedTicket, onClose, visible}) {
-  const Header = (props) => (
+export default function ModalTicketEditor({selectedTicket, onClose, visible}: any) {
+  const Header = (props: any) => (
     <View {...props}>
       <Text category='h3'>{selectedTicket.name}</Text>
       <Text category='s1'>{selectedTicket.ID}</Text>
     </View>
   );
 
-  const Footer = (props) => (
+  const Footer = (props: any) => (
     <View {...props} style={[props.style, styles.footerContainer]}>
       <Button
         style={styles.footerControl}

@@ -15,7 +15,7 @@ export default function QrReader({
   dataToModal,
   scanned,
   handleBarCodeScanned
-}) {
+}: any) {
 
   return (
     <View style={styles.container}>
@@ -38,7 +38,7 @@ export default function QrReader({
   );
 }
 
-function ScannedModal({ modalVisiblity, setModalVisiblity, setScanned, responseToModal, itemToValidate, markAsUsed, dataToModal }) {
+function ScannedModal({ modalVisiblity, setModalVisiblity, setScanned, responseToModal, itemToValidate, markAsUsed, dataToModal }: any) {
   const theme = useTheme();
   const ticket_pieces = getTicketTypes();
   // function ScannedModal() {

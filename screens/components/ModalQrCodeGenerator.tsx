@@ -3,7 +3,7 @@ import { StyleSheet, View } from 'react-native';
 import { Button, Text, Modal, Card, Layout, useTheme } from '@ui-kitten/components';
 import QRCode from 'react-native-qrcode-svg';
 
-export default function ModalQrCodeGenerator({ modalVisiblity, setModalVisiblity, dataToModal }) {
+export default function ModalQrCodeGenerator({ modalVisiblity, setModalVisiblity, dataToModal }: any) {
   const theme = useTheme();
   // function ScannedModal() {
   // const [modalVisiblity, setModalVisiblity] = useState(false);
