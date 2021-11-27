@@ -6,7 +6,7 @@ import { TouchableWithoutFeedback, StyleSheet, View } from 'react-native';
 import ModalTicketEditor from './components/ModalTicketEditor';
 import ModalQrCodeGenerator from './components/ModalQrCodeGenerator';
 
-export default function TicketsScreen({ onSelectTicket }) {
+export default function TicketsScreen({ onSelectTicket, manualValidation }) {
 
   const [editorVisible, setEditorVisible] = React.useState(false);
   const [selectedTicket, selectTicket] = React.useState(null);
@@ -18,9 +18,23 @@ export default function TicketsScreen({ onSelectTicket }) {
   const renderItemIcon = (props) => (
     <Icon {...props} name='person' />
   );
+  const EditIcon = (props) => (
+    <Icon {...props} name='edit-outline' />
+  );
 
-  const renderItemEdit = (props, item) => (
-    <Button size='medium' status='info' style={styles.editButton} onPress={() => { selectTicket(item); setEditorVisible(true); }}>Open in editor</Button>
+  const ValidateIcon = (props) => (
+    <Icon {...props} name='person-done-outline' />
+  );
+
+
+  const renderItemEditAndValidate = (props, item) => (
+    <>
+      <Button size='small' status='info' accessoryLeft={EditIcon} style={styles.editButton} onPress={() => { selectTicket(item); setEditorVisible(true); }}></Button>
+      <Button size='small' status='success' accessoryLeft={ValidateIcon} style={styles.editButton} onPress={() => { manualValidation(item.ID); }}></Button>
+    </>
+  );
+  const renderItemValidate = (props, item) => (
+    <Button size='small' status='success' accessoryLeft={ValidateIcon} style={styles.editButton} onPress={() => { manualValidation(item.ID); }}></Button>
   );
 
   function onSelectTicketShowQr(item) {
@@ -35,7 +49,7 @@ export default function TicketsScreen({ onSelectTicket }) {
       title={() => <Text style={styles.listItemTitle}>{item.name}</Text>}
       description={item.ID}
       accessoryLeft={renderItemIcon}
-      accessoryRight={(props) => isAdmin() ? renderItemEdit(props, item) : <></>}
+      accessoryRight={(props) => isAdmin() ? renderItemEditAndValidate(props, item) : renderItemValidate(props, item)}
       onPress={() => { selectTicket(item); onSelectTicketShowQr(item); }}
       style={styles.listItem}
     />
@@ -121,7 +135,9 @@ const styles = StyleSheet.create({
     fontSize: 20
   },
   editButton: {
-    borderRadius: 40,
+    borderRadius: 12,
+    width: 15,
+    marginLeft: 5
   },
   emptyListText: {
     fontSize: 40,

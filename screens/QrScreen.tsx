@@ -19,6 +19,10 @@ export default function QrScreen({ticketType, markTicketAsUsed}) {
   const [hasPermission, setHasPermission] = useState<CameraState>({ type: 'LOADING' });
   const DrawerR = createDrawerNavigator();
   const windowWidth = useWindowDimensions().width;
+  
+  const manualValidationfromList = (id: string) => {
+    alert(JSON.stringify(id));
+  }
 
   useEffect(() => {
     let permissionNeeded = true;
@@ -62,7 +66,7 @@ export default function QrScreen({ticketType, markTicketAsUsed}) {
   function CustomDrawerContent(props) {
     return (
       <KeyboardAvoidingView style={{flex:1}} behavior='height' keyboardVerticalOffset={40}>
-        <TicketsScreen onSelectTicket={ShowGeneratedQr} />
+        <TicketsScreen onSelectTicket={ShowGeneratedQr}  manualValidation={manualValidationfromList}/>
       </KeyboardAvoidingView>
     );
   }
