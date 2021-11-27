@@ -14,14 +14,14 @@ type Loading = { type: 'LOADING' };
 
 type CameraState = Granted | Denied | Loading;
 
-export default function QrScreen({ ticketType, markTicketAsUsed }) {
+export default function QrScreen({ ticketType, markTicketAsUsed }: any) {
 
   const [hasPermission, setHasPermission] = useState<CameraState>({ type: 'LOADING' });
   const DrawerR = createDrawerNavigator();
   const windowWidth = useWindowDimensions().width;
 
   const manualValidationfromList = (id: string) => {
-    alert(JSON.stringify(id));
+    fetchAndDisplayModal(id);
   }
 
   // ######################################################
@@ -35,9 +35,15 @@ export default function QrScreen({ ticketType, markTicketAsUsed }) {
   const [dataToModal, setDataToModal] = useState([""]);
 
   const itemToValidate = ticketType.key;
+  const [manualValidationValue, setManualValidationValue] = React.useState('');
 
   // handler when bacrode is scanned
   const handleBarCodeScanned = ({ type, data }: any) => {
+    fetchAndDisplayModal(data);
+  };
+
+  // handler when bacrode is scanned
+  const fetchAndDisplayModal = (data: string) => {
     setScanned(true);
     setModalVisiblity(true)
     fetchUserData(data);
@@ -125,34 +131,59 @@ export default function QrScreen({ ticketType, markTicketAsUsed }) {
     );
   }
 
+  const clearSearchBar = () => {
+    setManualValidationValue('');
+  };
+
+  function setValueAndValidate(nextValue: string) {
+    setManualValidationValue(nextValue);
+    // if (nextValue.length === 6) {
+    //   fetchAndDisplayModal(nextValue);
+    // }
+  }
+
   const Content = () => (
     <View style={styles.container}>
       <Text style={{ position: 'absolute', top: 0, zIndex: 100, fontSize: 30, width: '100%', textAlign: 'center', padding: 7, backgroundColor: 'white' }}>{ticketType.title}</Text>
-      <QrReader 
-        itemToValidate={ticketType.key} 
-        markAsUsed={markTicketAsUsed} 
-        hasPermission={hasPermission} 
-        setScanned={setScanned} 
-        modalVisiblity={modalVisiblity} 
-        setModalVisiblity ={setModalVisiblity}
-        responseToModal = {responseToModal}
-        dataToModal = {dataToModal}
+      <QrReader
+        itemToValidate={ticketType.key}
+        markAsUsed={markTicketAsUsed}
+        hasPermission={hasPermission}
+        setScanned={setScanned}
+        modalVisiblity={modalVisiblity}
+        setModalVisiblity={setModalVisiblity}
+        responseToModal={responseToModal}
+        dataToModal={dataToModal}
         scanned={scanned}
         handleBarCodeScanned={handleBarCodeScanned}
       />
-      <ManualValidation />
+
+      {/* Manual Validation */}
+      <View style={styles.searchBox}>
+        <Input
+          value={manualValidationValue}
+          autoCapitalize='characters'
+          autoCorrect={false}
+          placeholder='or Type QR code'
+          status='control'
+          size='large'
+          maxLength={10}
+          style={styles.searchBar}
+          textStyle={styles.searchBarText}
+          // onFocus={clearSearchBar}
+          onChangeText={nextValue => setManualValidationValue(nextValue)}
+          onSubmitEditing={e => fetchAndDisplayModal(e.nativeEvent.text)}
+        />
+      </View>
+
       <ModalTicketValidator />
     </View>
   )
 
-  function ShowGeneratedQr(person) {
-    setQrGeneratorModalVisiblity(true);
-  }
-
-  function CustomDrawerContent(props) {
+  function CustomDrawerContent(props: any) {
     return (
       <KeyboardAvoidingView style={{ flex: 1 }} behavior='height' keyboardVerticalOffset={40}>
-        <TicketsScreen onSelectTicket={ShowGeneratedQr} manualValidation={manualValidationfromList} />
+        <TicketsScreen manualValidation={manualValidationfromList} />
       </KeyboardAvoidingView>
     );
   }
@@ -168,32 +199,6 @@ export default function QrScreen({ ticketType, markTicketAsUsed }) {
   );
 }
 
-function ManualValidation() {
-  const [value, setValue] = React.useState('');
-
-  const clearSearchBar = () => {
-    setValue('');
-  };
-
-  return (
-    <View style={styles.searchBox}>
-      <Input
-        value={value}
-        autoCapitalize='characters'
-        autoCorrect={false}
-        placeholder='or Type QR code'
-        status='control'
-        size='large'
-        maxLength={10}
-        style={styles.searchBar}
-        textStyle={styles.searchBarText}
-        onFocus={clearSearchBar}
-        onChangeText={nextValue => setValue(nextValue)}
-      //onSubmitEditing={}
-      />
-    </View>
-  );
-}
 
 const styles = StyleSheet.create({
   container: {
