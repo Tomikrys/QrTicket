@@ -4,6 +4,7 @@ import { Button, Text, Divider, Input, Icon, List, ListItem, TopNavigation } fro
 import { TouchableWithoutFeedback, StyleSheet, View } from 'react-native';
 
 import ModalTicketEditor from './components/ModalTicketEditor';
+import ModalQrCodeGenerator from './components/ModalQrCodeGenerator';
 
 export default function TicketsScreen({ onSelectTicket }) {
 
@@ -11,6 +12,8 @@ export default function TicketsScreen({ onSelectTicket }) {
   const [selectedTicket, selectTicket] = React.useState(null);
   const allTickets = getListOfTickets();
   const [searchedTickets, setSearchedTickets] = React.useState(allTickets);
+  const [qrGeneratorModalVisiblity, setQrGeneratorModalVisiblity] = React.useState(false);
+  const [person, setPerson] = React.useState(null);
 
   const renderItemIcon = (props) => (
     <Icon {...props} name='person' />
@@ -20,6 +23,12 @@ export default function TicketsScreen({ onSelectTicket }) {
     <Button size='medium' status='info' style={styles.editButton} onPress={() => { selectTicket(item); setEditorVisible(true); }}>Open in editor</Button>
   );
 
+  function onSelectTicketShowQr(item) {
+    setPerson(item);
+    setQrGeneratorModalVisiblity(true);
+
+  }
+
   const renderItem = ({ item, index }) => (
     <ListItem
       key={index}
@@ -27,30 +36,33 @@ export default function TicketsScreen({ onSelectTicket }) {
       description={item.ID}
       accessoryLeft={renderItemIcon}
       accessoryRight={(props) => isAdmin() ? renderItemEdit(props, item) : <></>}
-      onPress={() => { selectTicket(item); onSelectTicket(item); }}
+      onPress={() => { selectTicket(item); onSelectTicketShowQr(item); }}
       style={styles.listItem}
     />
   );
 
   return (
-    <View style={{ flex: 1 }}>
-      <TopNavigation
-        style={{ elevation: 5 }}
-        title={() => <Text style={{ flex: 1, textAlign: 'center', fontSize: 20 }}>List of tickets</Text>}
-      />
-      <Divider />
-      <List
-        style={styles.list}
-        data={searchedTickets}
-        renderItem={renderItem}
-        ListEmptyComponent={<Text style={styles.emptyListText}>No tickets found!</Text>}
-      />
-      {(isAdmin() && selectedTicket != null) ? <ModalTicketEditor selectedTicket={selectedTicket} onClose={() => setEditorVisible(false)} visible={editorVisible} /> : <></>}
-      <Divider />
-      <View style={{ elevation: 5 }}>
-        <SearchBar setSearchedTickets={setSearchedTickets} allTickets={allTickets} />
+    <>
+      <View style={{ flex: 1 }}>
+        <TopNavigation
+          style={{ elevation: 5 }}
+          title={() => <Text style={{ flex: 1, textAlign: 'center', fontSize: 20 }}>List of tickets</Text>}
+        />
+        <Divider />
+        <List
+          style={styles.list}
+          data={searchedTickets}
+          renderItem={renderItem}
+          ListEmptyComponent={<Text style={styles.emptyListText}>No tickets found!</Text>}
+        />
+        {(isAdmin() && selectedTicket != null) ? <ModalTicketEditor selectedTicket={selectedTicket} onClose={() => setEditorVisible(false)} visible={editorVisible} /> : <></>}
+        <Divider />
+        <View style={{ elevation: 5 }}>
+          <SearchBar setSearchedTickets={setSearchedTickets} allTickets={allTickets} />
+        </View>
       </View>
-    </View>
+      <ModalQrCodeGenerator modalVisiblity={qrGeneratorModalVisiblity} setModalVisiblity={setQrGeneratorModalVisiblity} dataToModal={person} />
+    </>
   );
 };
 

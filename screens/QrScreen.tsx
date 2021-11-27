@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, useWindowDimensions, KeyboardAvoidingView, View } from 'react-native';
+import { StyleSheet, useWindowDimensions, KeyboardAvoidingView, View, Alert } from 'react-native';
 import QrReader from './components/QrReader';
 import { Text, Input, Spinner, Button } from '@ui-kitten/components';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import TicketsScreen from '../screens/TicketsScreen';
 import ModalTicketValidator from './components/ModalTicketValidator';
 import { BarCodeScanner } from 'expo-barcode-scanner';
+import ModalQrCodeGenerator from './components/ModalQrCodeGenerator';
 
 type Granted = { type: 'GRANTED' };
 type Denied = { type: 'DENIED' };
@@ -54,10 +55,14 @@ export default function QrScreen({ticketType, markTicketAsUsed}) {
     <QrScreenContent ticketType={ticketType} markTicketAsUsed={markTicketAsUsed} hasPermission={hasPermission}/>
   )
 
+  function ShowGeneratedQr(person) {
+    setQrGeneratorModalVisiblity(true);
+  }
+
   function CustomDrawerContent(props) {
     return (
       <KeyboardAvoidingView style={{flex:1}} behavior='height' keyboardVerticalOffset={40}>
-        <TicketsScreen onSelectTicket={(t) => console.log(t)} />
+        <TicketsScreen onSelectTicket={ShowGeneratedQr} />
       </KeyboardAvoidingView>
     );
   }

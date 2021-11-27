@@ -122,7 +122,7 @@ function ScannedModal({ modalVisiblity, setModalVisiblity, setScanned, responseT
               setModalVisiblity(false);
               setScanned(false);
             }}>
-              Zavřít
+              Close
             </Button>
           </View>
         </View>
