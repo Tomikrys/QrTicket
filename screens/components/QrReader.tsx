@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { forwardRef, useImperativeHandle, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import { Text, Card, Layout, Modal, Button, useTheme } from '@ui-kitten/components';
 import { getTicketTypes } from '../../components/Database';
 
-export default function QrReader({ itemToValidate, markAsUsed, hasPermission }) {
+function QrReader({ itemToValidate, markAsUsed, hasPermission, QrReaderRef }) {
   const [scanned, setScanned] = useState(false);
   const [modalVisiblity, setModalVisiblity] = useState(false);
   //response which is used by modal but not shown
@@ -34,6 +34,15 @@ export default function QrReader({ itemToValidate, markAsUsed, hasPermission }) 
     // alert(`Bar code with type ${type} and data ${data} has been scanned! Chosen ${itemToValidate} doslo zpet ${JSON.stringify(responseToModal)}`);
   };
 
+  // manual validation from TicketScrren (called trough QRScreen)
+  useImperativeHandle(QrReaderRef, () => ({
+    handleManualValidation(id: string) {
+      setScanned(true);
+      setModalVisiblity(true)
+      fetchUserData(id);
+    }
+  }), [])
+
   return (
     <View style={styles.container}>
       <ScannedModal modalVisiblity={modalVisiblity} setModalVisiblity={setModalVisiblity}
@@ -54,6 +63,7 @@ export default function QrReader({ itemToValidate, markAsUsed, hasPermission }) 
     </View>
   );
 }
+export default forwardRef(QrReader);
 
 //function gets object from server and checks if the required ticket is valid/used...
 function validateTicket(user_data, ticketInterest) {
@@ -80,13 +90,13 @@ function getTextForModal(user_data, ticketInterest) {
 
   switch (res) {
     case 'used':
-      return ["warning", "Vstupenka již byla odbavena dříve!", user_data?.name, user_data[ticketInterest] ]
+      return ["warning", "Vstupenka již byla odbavena dříve!", user_data?.name, user_data[ticketInterest]]
     case 'ok':
-      return ["success", "Vstupenka odbavena.", user_data?.name, user_data[ticketInterest] ]
+      return ["success", "Vstupenka odbavena.", user_data?.name, user_data[ticketInterest]]
     case 'not':
-      return ["info", "Nezakoupeno!", user_data?.name, user_data[ticketInterest] ]
+      return ["info", "Nezakoupeno!", user_data?.name, user_data[ticketInterest]]
     default:
-      return ["danger", "Nastala chyba", user_data?.name, user_data[ticketInterest] ]
+      return ["danger", "Nastala chyba", user_data?.name, user_data[ticketInterest]]
   }
 }
 
@@ -101,27 +111,27 @@ function ScannedModal({ modalVisiblity, setModalVisiblity, setScanned, responseT
         <View style={[styles.modalWindow, { backgroundColor: theme[`color-${dataToModal[0]}-200`], borderColor: theme[`color-${dataToModal[0]}-default`] }]}>
           {dataToModal ?
             <React.Fragment>
-              <Text 
+              <Text
                 category='h2'
-                style={[ styles.title , { backgroundColor: theme[`color-${dataToModal[0]}-default`] } ]}
-              >{ dataToModal[1] }</Text>
+                style={[styles.title, { backgroundColor: theme[`color-${dataToModal[0]}-default`] }]}
+              >{dataToModal[1]}</Text>
               <View style={{ paddingStart: 5 }}>
-                <Text category='h3' >{ dataToModal[2] }</Text>
-                {ticket_pieces && <Text category='h5'>{ ticket_pieces.find(item => item.key === itemToValidate)?.title } - {dataToModal[3]}</Text>}
+                <Text category='h3' >{dataToModal[2]}</Text>
+                {ticket_pieces && <Text category='h5'>{ticket_pieces.find(item => item.key === itemToValidate)?.title} - {dataToModal[3]}</Text>}
               </View>
             </React.Fragment>
             :
             <Text>Loading</Text>
           }
-          <View style={[ styles.spacer, { backgroundColor: theme[`color-${dataToModal[0]}-default`] } ]}></View>
-          <View style={{ alignItems: 'center'}}>
-            <Button 
-              style={{marginBottom: 5, width: '60%'}}
+          <View style={[styles.spacer, { backgroundColor: theme[`color-${dataToModal[0]}-default`] }]}></View>
+          <View style={{ alignItems: 'center' }}>
+            <Button
+              style={{ marginBottom: 5, width: '60%' }}
               status='primary'
               onPress={() => {
-              setModalVisiblity(false);
-              setScanned(false);
-            }}>
+                setModalVisiblity(false);
+                setScanned(false);
+              }}>
               Close
             </Button>
           </View>
@@ -170,27 +180,27 @@ const styles = StyleSheet.create({
     flex: 2,
     backgroundColor: opacity
   },
-  modalContainer: { 
-    backgroundColor: 'rgba(255, 255, 255, 0.5)', 
-    width: '100%', height: '100%', 
-    alignItems: 'center', 
-    justifyContent: 'center' 
+  modalContainer: {
+    backgroundColor: 'rgba(255, 255, 255, 0.5)',
+    width: '100%', height: '100%',
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   modalWindow: {
     borderWidth: 2,
     borderRadius: 5,
     width: '90%'
   },
-  spacer: { 
-    height: 2, 
-    width: '95%', 
-    alignSelf: 'center', 
-    marginBottom: 5, 
-    marginTop: 5 
+  spacer: {
+    height: 2,
+    width: '95%',
+    alignSelf: 'center',
+    marginBottom: 5,
+    marginTop: 5
   },
-  title: { 
-    color: 'white', 
-    padding: 3, 
-    paddingStart: 10 
+  title: {
+    color: 'white',
+    padding: 3,
+    paddingStart: 10
   }
 });
