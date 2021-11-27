@@ -14,21 +14,91 @@ type Loading = { type: 'LOADING' };
 
 type CameraState = Granted | Denied | Loading;
 
-export default function QrScreen({ticketType, markTicketAsUsed}) {
+export default function QrScreen({ ticketType, markTicketAsUsed }) {
 
   const [hasPermission, setHasPermission] = useState<CameraState>({ type: 'LOADING' });
   const DrawerR = createDrawerNavigator();
   const windowWidth = useWindowDimensions().width;
-  
+
   const manualValidationfromList = (id: string) => {
     alert(JSON.stringify(id));
   }
 
+  // ######################################################
+  // FROM QrReader.tsx
+  // ######################################################
+  const [scanned, setScanned] = useState(false);
+  const [modalVisiblity, setModalVisiblity] = useState(false);
+  //response which is used by modal but not shown
+  const [responseToModal, setResponseToModal] = useState(null);
+  //data shown in modal
+  const [dataToModal, setDataToModal] = useState([""]);
+
+  const itemToValidate = ticketType.key;
+
+  // handler when bacrode is scanned
+  const handleBarCodeScanned = ({ type, data }: any) => {
+    setScanned(true);
+    setModalVisiblity(true)
+    fetchUserData(data);
+    // alert(`Bar code with type ${type} and data ${data} has been scanned! Chosen ${itemToValidate} doslo zpet ${JSON.stringify(responseToModal)}`);
+  };
+
+  //fetch all data about one user - user ID is data scanned from QR code
+  const fetchUserData = (user: any) => {
+    fetch(`https://sjezd-qr-ticket.herokuapp.com/get/${user}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setResponseToModal(data.message[0]);
+        setDataToModal(getTextForModal(data.message[0], itemToValidate));
+      })
+      .catch(function (error) {
+        alert("ERROR: Chyba připojení k databázi při načítání vstupenky." + error);
+      });
+    // .then(data => console.log(data));
+  };
+
+  function getTextForModal(user_data: any, ticketInterest: any) {
+    let res = validateTicket(user_data, ticketInterest);
+
+    switch (res) {
+      case 'used':
+        return ["warning", "Vstupenka již byla odbavena dříve!", user_data?.name, user_data[ticketInterest]]
+      case 'ok':
+        return ["success", "Vstupenka odbavena.", user_data?.name, user_data[ticketInterest]]
+      case 'not':
+        return ["info", "Nezakoupeno!", user_data?.name, user_data[ticketInterest]]
+      default:
+        return ["danger", "Nastala chyba", user_data?.name, user_data[ticketInterest]]
+    }
+  }
+
+  //function gets object from server and checks if the required ticket is valid/used...
+  function validateTicket(user_data: any, ticketInterest: any) {
+    if (!user_data) {
+      return "error";
+    } else if (user_data && user_data.hasOwnProperty("timestamp_" + ticketInterest) && user_data["timestamp_" + ticketInterest] !== null) {
+      return "used";
+    } else if (user_data && user_data.hasOwnProperty(ticketInterest) && ["true", "all", "sobota", "maso", "bezmaso"].includes(user_data[ticketInterest])) {
+      { // if (dataToModal) {
+        //TODO fetch na oznaceni vstupenky
+        //}
+        return "ok";
+      }
+    } else if (user_data && user_data.hasOwnProperty(ticketInterest) && [null, "", false].includes(user_data[ticketInterest])) {
+      return "not";
+    } else {
+      return "error";
+    }
+  }
+
+  // ######################################################
+
   useEffect(() => {
     let permissionNeeded = true;
 
-    BarCodeScanner.requestPermissionsAsync().then(({status}) => {
-      if (permissionNeeded) setHasPermission(status === 'granted' ? { type: 'GRANTED' } : { type: 'DENIED' } );
+    BarCodeScanner.requestPermissionsAsync().then(({ status }) => {
+      if (permissionNeeded) setHasPermission(status === 'granted' ? { type: 'GRANTED' } : { type: 'DENIED' });
     });
 
     return () => { permissionNeeded = false };
@@ -39,8 +109,8 @@ export default function QrScreen({ticketType, markTicketAsUsed}) {
       <View style={{ height: '100%', justifyContent: 'center' }}>
         <Text category='h4' style={{ textAlign: 'center' }}>Please allow Camera</Text>
         <Button onPress={() => {
-          BarCodeScanner.requestPermissionsAsync().then(({status}) => {
-            setHasPermission(status === 'granted' ? { type: 'GRANTED' } : { type: 'DENIED' } );
+          BarCodeScanner.requestPermissionsAsync().then(({ status }) => {
+            setHasPermission(status === 'granted' ? { type: 'GRANTED' } : { type: 'DENIED' });
           });
         }}>Done</Button>
       </View>
@@ -56,7 +126,23 @@ export default function QrScreen({ticketType, markTicketAsUsed}) {
   }
 
   const Content = () => (
-    <QrScreenContent ticketType={ticketType} markTicketAsUsed={markTicketAsUsed} hasPermission={hasPermission}/>
+    <View style={styles.container}>
+      <Text style={{ position: 'absolute', top: 0, zIndex: 100, fontSize: 30, width: '100%', textAlign: 'center', padding: 7, backgroundColor: 'white' }}>{ticketType.title}</Text>
+      <QrReader 
+        itemToValidate={ticketType.key} 
+        markAsUsed={markTicketAsUsed} 
+        hasPermission={hasPermission} 
+        setScanned={setScanned} 
+        modalVisiblity={modalVisiblity} 
+        setModalVisiblity ={setModalVisiblity}
+        responseToModal = {responseToModal}
+        dataToModal = {dataToModal}
+        scanned={scanned}
+        handleBarCodeScanned={handleBarCodeScanned}
+      />
+      <ManualValidation />
+      <ModalTicketValidator />
+    </View>
   )
 
   function ShowGeneratedQr(person) {
@@ -65,31 +151,20 @@ export default function QrScreen({ticketType, markTicketAsUsed}) {
 
   function CustomDrawerContent(props) {
     return (
-      <KeyboardAvoidingView style={{flex:1}} behavior='height' keyboardVerticalOffset={40}>
-        <TicketsScreen onSelectTicket={ShowGeneratedQr}  manualValidation={manualValidationfromList}/>
+      <KeyboardAvoidingView style={{ flex: 1 }} behavior='height' keyboardVerticalOffset={40}>
+        <TicketsScreen onSelectTicket={ShowGeneratedQr} manualValidation={manualValidationfromList} />
       </KeyboardAvoidingView>
     );
   }
 
   return (
-    <DrawerR.Navigator initialRouteName='QRScreen' backBehavior='initialRoute' screenOptions={{ drawerPosition: 'right', drawerStyle: { width: '90%' }, headerShown: false}} drawerContent={(props) => <CustomDrawerContent {...props} />}>
+    <DrawerR.Navigator initialRouteName='QRScreen' backBehavior='initialRoute' screenOptions={{ drawerPosition: 'right', drawerStyle: { width: '90%' }, headerShown: false }} drawerContent={(props) => <CustomDrawerContent {...props} />}>
       <DrawerR.Screen
         name='QRScreen'
         component={Content}
-        options={{ drawerLabel: 'QRScreen', swipeEdgeWidth: windowWidth/2 }}
+        options={{ drawerLabel: 'QRScreen', swipeEdgeWidth: windowWidth / 2 }}
       />
     </DrawerR.Navigator>
-  );
-}
-
-function QrScreenContent({ticketType, markTicketAsUsed, hasPermission}) {
-  return (
-    <View style={styles.container}>
-      <Text style={{position: 'absolute', top: 0, zIndex: 100, fontSize: 30, width: '100%', textAlign: 'center', padding: 7, backgroundColor: 'white' }}>{ticketType.title}</Text>
-      <QrReader itemToValidate={ticketType.key} markAsUsed={markTicketAsUsed} hasPermission={hasPermission} />
-      <ManualValidation />
-      <ModalTicketValidator />
-    </View>
   );
 }
 
@@ -114,7 +189,7 @@ function ManualValidation() {
         textStyle={styles.searchBarText}
         onFocus={clearSearchBar}
         onChangeText={nextValue => setValue(nextValue)}
-        //onSubmitEditing={}
+      //onSubmitEditing={}
       />
     </View>
   );
