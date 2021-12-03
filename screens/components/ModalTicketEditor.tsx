@@ -30,8 +30,9 @@ export default function ModalTicketEditor({selectedTicket, onClose, visible}: an
   );
 
   function CardAccessoriesShowcase() {
-    const options = [ "--", "Maso", "Nemaso" ];
-    const [selectedIndex, setSelectedIndex] = React.useState(0);
+    const options = [ "--", "Meat", "Vege" ];
+    const [selectedOption, setSelectedOption] = React.useState(0);
+    const [checked, setChecked] = React.useState(false);
     const [selectedPage, setSelectedPage] = React.useState(0);
     const shouldLoadComponent = (index) => index === selectedPage;
 
@@ -62,8 +63,8 @@ export default function ModalTicketEditor({selectedTicket, onClose, visible}: an
               <Text category='h6'>Dinner:</Text>
               <Select
                 style={{ padding: 4, flexGrow: 1, marginLeft: 8 }}
-                value={ options[selectedIndex] }
-                onSelect={index => setSelectedIndex(index.row)}>
+                value={ options[selectedOption] }
+                onSelect={index => setSelectedOption(index.row)}>
                 { options.map(item => (<SelectItem title={item} />)) }
               </Select>
             </View>
@@ -72,18 +73,16 @@ export default function ModalTicketEditor({selectedTicket, onClose, visible}: an
           <Divider />
             <View style={ styles.bodyContainer }>
               <Text category='h6'>Breakfast:</Text>
-              <Toggle style={{ padding: 4 }} />
+              <Toggle checked={checked} onChange={setChecked} style={{ padding: 4 }} />
             </View>
             <Divider />
             <View style={ styles.bodyContainer }>
               <Text category='h6'>Lunch:</Text>
               <Select
                 style={{ padding: 4, flexGrow: 1, marginLeft: 8 }}
-                value={ options[selectedIndex] }
-                onSelect={index => setSelectedIndex(index.row)}>
-                <SelectItem title='--' />
-                <SelectItem title='Maso'/>
-                <SelectItem title='Nemaso'/>
+                value={ options[selectedOption] }
+                onSelect={index => setSelectedOption(index.row)}>
+                { options.map(item => (<SelectItem title={item} />)) }
               </Select>
             </View>
             <Divider />
@@ -91,11 +90,9 @@ export default function ModalTicketEditor({selectedTicket, onClose, visible}: an
               <Text category='h6'>Dinner:</Text>
               <Select
                 style={{ padding: 4, flexGrow: 1, marginLeft: 8 }}
-                value={ options[selectedIndex] }
-                onSelect={index => setSelectedIndex(index.row)}>
-                <SelectItem title='--' />
-                <SelectItem title='Maso'/>
-                <SelectItem title='Nemaso'/>
+                value={ options[selectedOption] }
+                onSelect={index => setSelectedOption(index.row)}>
+                { options.map(item => (<SelectItem title={item} />)) }
               </Select>
             </View>
           </Layout>
@@ -103,18 +100,16 @@ export default function ModalTicketEditor({selectedTicket, onClose, visible}: an
           <Divider />
             <View style={ styles.bodyContainer }>
               <Text category='h6'>Breakfast:</Text>
-              <Toggle style={{ padding: 4 }} />
+              <Toggle checked={checked} onChange={setChecked} style={{ padding: 4 }} />
             </View>
             <Divider />
             <View style={ styles.bodyContainer }>
               <Text category='h6'>Lunch:</Text>
               <Select
                 style={{ padding: 4, flexGrow: 1, marginLeft: 8 }}
-                value={ options[selectedIndex] }
-                onSelect={index => setSelectedIndex(index.row)}>
-                <SelectItem title='--' />
-                <SelectItem title='Maso'/>
-                <SelectItem title='Nemaso'/>
+                value={ options[selectedOption] }
+                onSelect={index => setSelectedOption(index.row)}>
+                { options.map(item => (<SelectItem title={item} />)) }
               </Select>
             </View>
             <Divider />
@@ -122,11 +117,9 @@ export default function ModalTicketEditor({selectedTicket, onClose, visible}: an
               <Text category='h6'>Dinner:</Text>
               <Select
                 style={{ padding: 4, flexGrow: 1, marginLeft: 8 }}
-                value={ options[selectedIndex] }
-                onSelect={index => setSelectedIndex(index.row)}>
-                <SelectItem title='--' />
-                <SelectItem title='Maso'/>
-                <SelectItem title='Nemaso'/>
+                value={ options[selectedOption] }
+                onSelect={index => setSelectedOption(index.row)}>
+                { options.map(item => (<SelectItem title={item} />)) }
               </Select>
             </View>
           </Layout>
