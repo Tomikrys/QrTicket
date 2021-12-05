@@ -2,15 +2,15 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Button, Text, Modal, Card } from '@ui-kitten/components';
 
-export default function ModalTicketValidator(properties) {
-  const Header = (props) => (
+export default function ModalTicketValidator(properties: any) {
+  const Header = (props: any) => (
     <View {...props}>
       <Text category='h3'>{properties.user}</Text>
       <Text category='s1'>{properties.desc}</Text>
     </View>
   );
 
-  const Footer = (props) => (
+  const Footer = (props: any) => (
     <View {...props} style={[props.style, styles.footerContainer]}>
       <Button
         style={styles.footerControl}
