@@ -18,7 +18,7 @@ export default function App() {
     return (
     <>
       <ApplicationProvider {...eva} theme={eva.light}>
-        <StatusBar hidden={false} backgroundColor='gray' barStyle='black'/>
+        <StatusBar hidden={false} backgroundColor='gray'/>
         <IconRegistry icons={EvaIconsPack} />
         <SafeAreaProvider>
           <Navigator />
