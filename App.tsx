@@ -17,7 +17,7 @@ export default function App() {
   } else {
     return (
     <>
-      <ApplicationProvider {...eva} theme={eva.light}>
+      <ApplicationProvider {...eva} theme={eva.dark}>
         <StatusBar hidden={false} backgroundColor='gray'/>
         <IconRegistry icons={EvaIconsPack} />
         <SafeAreaProvider>

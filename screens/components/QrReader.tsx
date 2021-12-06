@@ -3,6 +3,8 @@ import { View, StyleSheet } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import { Text, Card, Layout, Modal, Button, useTheme } from '@ui-kitten/components';
 import { getTicketTypes } from '../../components/Database';
+import { color } from 'react-native-reanimated';
+import { Background } from '@react-navigation/elements';
 
 export default function QrReader({
   itemToValidate,
@@ -51,15 +53,15 @@ function ScannedModal({ modalVisiblity, setModalVisiblity, setScanned, responseT
             <React.Fragment>
               <Text
                 category='h2'
-                style={[styles.title, { backgroundColor: theme[`color-${dataToModal[0]}-default`] }]}
+                style={[styles.textBlack, styles.title, { backgroundColor: theme[`color-${dataToModal[0]}-default`] }]}
               >{dataToModal[1]}</Text>
               <View style={{ paddingStart: 5 }}>
-                <Text category='h3' >{dataToModal[2]}</Text>
-                {ticket_pieces && <Text category='h5'>{ticket_pieces.find(item => item.key === itemToValidate)?.title} - {dataToModal[3]}</Text>}
+                <Text style={styles.textBlack} category='h3' >{dataToModal[2]}</Text>
+                {ticket_pieces && <Text style={styles.textBlack}  category='h5'>{ticket_pieces.find(item => item.key === itemToValidate)?.title} - {dataToModal[3]}</Text>}
               </View>
             </React.Fragment>
             :
-            <Text>Loading</Text>
+            <Text style={styles.textBlack} >Loading</Text>
           }
           <View style={[styles.spacer, { backgroundColor: theme[`color-${dataToModal[0]}-default`] }]}></View>
           <View style={{ alignItems: 'center' }}>
@@ -88,7 +90,8 @@ const styles = StyleSheet.create({
     right: 0,
     top: 0,
     bottom: 0,
-    position: 'absolute'
+    position: 'absolute',
+    backgroundColor: 'black'
   },
   camera: {
     flex: 1,
@@ -137,8 +140,11 @@ const styles = StyleSheet.create({
     marginTop: 5
   },
   title: {
-    color: 'white',
+    backgroundColor: 'black',
     padding: 3,
     paddingStart: 10
+  },
+  textBlack: {
+    color: 'black',
   }
 });

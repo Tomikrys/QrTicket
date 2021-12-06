@@ -50,11 +50,13 @@ const styles = StyleSheet.create({
     fontSize: 42,
     textAlign: 'center',
     paddingBottom: 5, 
+    color: 'black'
   },
   subtitle: {
     fontSize: 25,
     textAlign: 'center',
     paddingTop: 5,
+    color: 'black'
   },
   modalContainer: { 
     backgroundColor: 'rgba(255, 255, 255, 0.5)', 

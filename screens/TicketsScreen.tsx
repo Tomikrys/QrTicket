@@ -57,10 +57,13 @@ export default function TicketsScreen({ manualValidation }: any) {
 
   return (
     <>
-      <View style={{ flex: 1 }}>
+      <View style={{
+        flex: 1,
+        backgroundColor: 'black'
+      }}>
         <TopNavigation
           style={{ elevation: 5 }}
-          title={() => <Text style={{ flex: 1, textAlign: 'center', fontSize: 20 }}>List of tickets</Text>}
+          title={() => <Text style={{ flex: 1, textAlign: 'center', fontSize: 25 }}>List of tickets</Text>}
         />
         <Divider />
         <List
@@ -71,7 +74,7 @@ export default function TicketsScreen({ manualValidation }: any) {
         />
         {(isAdmin() && selectedTicket != null) ? <ModalTicketEditor selectedTicket={selectedTicket} onClose={() => setEditorVisible(false)} visible={editorVisible} /> : <></>}
         <Divider />
-        <View style={{ elevation: 5 }}>
+        <View style={{ elevation: 5, backgroundColor: 'black' }}>
           <SearchBar setSearchedTickets={setSearchedTickets} allTickets={allTickets} />
         </View>
       </View>
@@ -124,8 +127,9 @@ function SearchBar({ setSearchedTickets, allTickets }: any) {
 const styles = StyleSheet.create({
   list: {
     width: '100%',
-    backgroundColor: '#f4f4f4',
+    backgroundColor: 'black',
     padding: 15,
+    // paddingBottom: 60
   },
   listItem: {
     margin: 5,
@@ -145,7 +149,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center'
   },
   searchBar: {
-    backgroundColor: '#fff',
+    backgroundColor: 'black',
     padding: 10,
     color: '#000',
     borderColor: '#aaa',

@@ -4,7 +4,7 @@ import { Button, Text, Modal, Card } from '@ui-kitten/components';
 
 export default function ModalTicketValidator(properties: any) {
   const Header = (props: any) => (
-    <View {...props}>
+    <View {...props} style={styles.text}>
       <Text category='h3'>{properties.user}</Text>
       <Text category='s1'>{properties.desc}</Text>
     </View>
@@ -48,13 +48,16 @@ export default function ModalTicketValidator(properties: any) {
 }
 
 const styles = StyleSheet.create({
+  text: {
+    color: 'black'
+  },
   topContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
   card: {
     flex: 1,
-    margin: 2,
+    margin: 2
   },
   footerContainer: {
     flexDirection: 'row',
@@ -64,6 +67,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 2,
   },
   backdrop: {
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)'
   }
 });
