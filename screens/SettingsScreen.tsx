@@ -1,21 +1,19 @@
 import React from 'react';
 import { BottomNavigation, BottomNavigationTab, Icon, Text, Divider, TopNavigation, Card, useTheme, Button } from '@ui-kitten/components';
 import { ScrollView, StyleSheet, View } from 'react-native';
-import { getTicketTypes } from '../components/Database';
 
-export default function SettingsScreen({ticketType, markTicketAsUsed, setTicketType, setMarkTicketAsUsed}) {
+export interface TicketType {
+  key: string,
+  title: string
+}
 
-    const ticketTypes = getTicketTypes();
+export default function SettingsScreen({ticketType, markTicketAsUsed, setTicketType, setMarkTicketAsUsed, ticketTypes}: any) {
 
-    if (ticketType.key == null && ticketTypes.length) {
-      setTicketType(ticketTypes[0]);
-    }
-
-    const ValidateIcon = (props) => (
+    const ValidateIcon = (props: any) => (
       <Icon {...props} name='eye-outline'/>
     );
 
-    const CheckInIcon = (props) => (
+    const CheckInIcon = (props: any) => (
       <Icon {...props} name='checkmark-circle-2-outline'/>
     );
 
@@ -28,7 +26,7 @@ export default function SettingsScreen({ticketType, markTicketAsUsed, setTicketT
             />
             <Divider />
             <ScrollView contentContainerStyle={styles.cardBoxContent}>
-            {ticketTypes.map((obj, idx) =>
+            {ticketTypes.map((obj: TicketType, idx: number) =>
               <Card key={obj.key} style={[ styles.card, (ticketType.key === obj.key) && { backgroundColor: theme['color-primary-default'] } ]} onPress={() => { setTicketType(obj); }}>
                 <Text style={[ styles.cardText, (ticketType.key === obj.key) && { color: 'white' } ]}>{obj.title}</Text>
               </Card>

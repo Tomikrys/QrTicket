@@ -1,19 +1,20 @@
 import React from 'react';
 
 import QrScreen from '../screens/QrScreen';
-import TicketsScreen from '../screens/TicketsScreen';
 import LoginScreen from '../screens/LoginScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { useWindowDimensions } from 'react-native';
+import { getTicketTypes } from '../components/Database';
 
 export default function Navigator() {
   const DrawerL = createDrawerNavigator();
   const windowWidth = useWindowDimensions().width;
 
-  const [ticketType, setTicketType] = React.useState({key: null, title: 'No selected ticket type'});
+  const ticketTypes = getTicketTypes();
+  const [ticketType, setTicketType] = React.useState(ticketTypes[0]);
   const [markTicketAsUsed, setMarkTicketAsUsed] = React.useState(0);
 
   const QrScreenContent = () => (
@@ -21,7 +22,7 @@ export default function Navigator() {
   )
 
   const Settings = () => (
-    <SettingsScreen ticketType={ticketType} markTicketAsUsed={markTicketAsUsed} setTicketType={setTicketType} setMarkTicketAsUsed={setMarkTicketAsUsed}/>
+    <SettingsScreen ticketType={ticketType} markTicketAsUsed={markTicketAsUsed} setTicketType={setTicketType} setMarkTicketAsUsed={setMarkTicketAsUsed} ticketTypes={ticketTypes}/>
   )
 
   return (
