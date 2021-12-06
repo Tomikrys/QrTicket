@@ -131,7 +131,9 @@ export default function ModalTicketEditor({selectedTicket, onClose, visible}: an
   return (
     <Modal
       visible={visible}
-      backdropStyle={styles.backdrop}>
+      backdropStyle={styles.backdrop}
+      style={{ width: '90%' }}
+    >
       <CardAccessoriesShowcase />
     </Modal>
   );
@@ -144,7 +146,7 @@ const styles = StyleSheet.create({
   },
   card: {
     flex: 1,
-    margin: 2,
+    padding: 2
   },
   footerContainer: {
     flexDirection: 'row',

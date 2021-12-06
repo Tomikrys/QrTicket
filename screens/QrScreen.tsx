@@ -63,13 +63,13 @@ export default function QrScreen({ ticketType, markTicketAsUsed, hasPermission, 
 
     switch (res) {
       case 'used':
-        return ["warning", "Vstupenka již byla odbavena dříve!", user_data?.name, user_data[ticketInterest]]
+        return ["warning", "Ticket has been already used!", user_data?.name, user_data[ticketInterest]]
       case 'ok':
-        return ["success", "Vstupenka odbavena.", user_data?.name, user_data[ticketInterest]]
+        return ["success", "Ticket checked", user_data?.name, user_data[ticketInterest]]
       case 'not':
-        return ["info", "Nezakoupeno!", user_data?.name, user_data[ticketInterest]]
+        return ["info", "Not purchased!", user_data?.name, user_data[ticketInterest]]
       default:
-        return ["danger", "Nastala chyba", user_data?.name, user_data[ticketInterest]]
+        return ["danger", "Error", user_data?.name, user_data[ticketInterest]]
     }
   }
 
