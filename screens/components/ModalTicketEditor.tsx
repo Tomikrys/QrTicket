@@ -65,7 +65,7 @@ export default function ModalTicketEditor({selectedTicket, onClose, visible}: an
                 style={{ padding: 4, flexGrow: 1, marginLeft: 8 }}
                 value={ options[selectedOption] }
                 onSelect={index => setSelectedOption(index.row)}>
-                { options.map(item => (<SelectItem title={item} />)) }
+                { options.map((item, index) => (<SelectItem title={item} key={index} />)) }
               </Select>
             </View>
           </Layout>
@@ -82,7 +82,7 @@ export default function ModalTicketEditor({selectedTicket, onClose, visible}: an
                 style={{ padding: 4, flexGrow: 1, marginLeft: 8 }}
                 value={ options[selectedOption] }
                 onSelect={index => setSelectedOption(index.row)}>
-                { options.map(item => (<SelectItem title={item} />)) }
+                { options.map((item, index) => (<SelectItem title={item} key={index} />)) }
               </Select>
             </View>
             <Divider />
@@ -92,7 +92,7 @@ export default function ModalTicketEditor({selectedTicket, onClose, visible}: an
                 style={{ padding: 4, flexGrow: 1, marginLeft: 8 }}
                 value={ options[selectedOption] }
                 onSelect={index => setSelectedOption(index.row)}>
-                { options.map(item => (<SelectItem title={item} />)) }
+                { options.map((item, index) => (<SelectItem title={item} key={index} />)) }
               </Select>
             </View>
           </Layout>
@@ -109,7 +109,7 @@ export default function ModalTicketEditor({selectedTicket, onClose, visible}: an
                 style={{ padding: 4, flexGrow: 1, marginLeft: 8 }}
                 value={ options[selectedOption] }
                 onSelect={index => setSelectedOption(index.row)}>
-                { options.map(item => (<SelectItem title={item} />)) }
+                { options.map((item, index) => (<SelectItem title={item} key={index} />)) }
               </Select>
             </View>
             <Divider />
@@ -119,7 +119,7 @@ export default function ModalTicketEditor({selectedTicket, onClose, visible}: an
                 style={{ padding: 4, flexGrow: 1, marginLeft: 8 }}
                 value={ options[selectedOption] }
                 onSelect={index => setSelectedOption(index.row)}>
-                { options.map(item => (<SelectItem title={item} />)) }
+                { options.map((item, index) => (<SelectItem title={item} key={index} />)) }
               </Select>
             </View>
           </Layout>
