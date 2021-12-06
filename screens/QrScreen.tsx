@@ -48,11 +48,9 @@ export default function QrScreen({ ticketType, markTicketAsUsed }: any) {
 
   //fetch all data about one user - user ID is data scanned from QR code
   const fetchUserData = (user: any) => {
-    console.log('fetching data');
     fetch(`https://sjezd-qr-ticket.herokuapp.com/get/${user}`)
       .then((res) => res.json())
       .then((data) => {
-        console.log('data received');
         setModalState({ type: 'DATA', isVisible: true, data: getTextForModal(data.message[0], itemToValidate) });
       })
       .catch(function (error) {
