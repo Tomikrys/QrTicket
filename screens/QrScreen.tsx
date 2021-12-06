@@ -11,11 +11,9 @@ type Granted = { type: 'GRANTED' };
 type Denied = { type: 'DENIED' };
 type Loading = { type: 'LOADING' };
 
-type CameraState = Granted | Denied | Loading;
+export type CameraState = Granted | Denied | Loading;
 
-export default function QrScreen({ ticketType, markTicketAsUsed }: any) {
-
-  const [hasPermission, setHasPermission] = useState<CameraState>({ type: 'LOADING' });
+export default function QrScreen({ ticketType, markTicketAsUsed, hasPermission, setHasPermission }: any) {
   const DrawerR = createDrawerNavigator();
   const windowWidth = useWindowDimensions().width;
 
@@ -95,16 +93,6 @@ export default function QrScreen({ ticketType, markTicketAsUsed }: any) {
   }
 
   // ######################################################
-
-  useEffect(() => {
-    let permissionNeeded = true;
-
-    BarCodeScanner.requestPermissionsAsync().then(({ status }) => {
-      if (permissionNeeded) setHasPermission(status === 'granted' ? { type: 'GRANTED' } : { type: 'DENIED' });
-    });
-
-    return () => { permissionNeeded = false };
-  }, []);
 
   if (hasPermission.type === 'DENIED') {
     return (

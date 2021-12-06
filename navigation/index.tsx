@@ -1,13 +1,12 @@
-import React from 'react';
-
-import QrScreen from '../screens/QrScreen';
+import React, { useEffect, useState } from 'react';
+import QrScreen, { CameraState } from '../screens/QrScreen';
 import LoginScreen from '../screens/LoginScreen';
 import SettingsScreen from '../screens/SettingsScreen';
-
 import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import { useWindowDimensions } from 'react-native';
+import { useWindowDimensions, View } from 'react-native';
 import { getTicketTypes } from '../components/Database';
+import { BarCodeScanner } from 'expo-barcode-scanner';
 
 export default function Navigator() {
   const DrawerL = createDrawerNavigator();
@@ -16,9 +15,20 @@ export default function Navigator() {
   const ticketTypes = getTicketTypes();
   const [ticketType, setTicketType] = React.useState(ticketTypes[0]);
   const [markTicketAsUsed, setMarkTicketAsUsed] = React.useState(0);
+  const [hasPermission, setHasPermission] = useState<CameraState>({ type: 'LOADING' });
+
+  useEffect(() => {
+    let permissionNeeded = true;
+
+    BarCodeScanner.requestPermissionsAsync().then(({ status }) => {
+      if (permissionNeeded) setHasPermission(status === 'granted' ? { type: 'GRANTED' } : { type: 'DENIED' });
+    });
+
+    return () => { permissionNeeded = false };
+  }, []);
 
   const QrScreenContent = () => (
-    <QrScreen ticketType={ticketType} markTicketAsUsed={markTicketAsUsed}/>
+    <QrScreen ticketType={ticketType} markTicketAsUsed={markTicketAsUsed} hasPermission={hasPermission} setHasPermission={setHasPermission} />
   )
 
   const Settings = () => (
