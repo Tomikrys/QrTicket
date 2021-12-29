@@ -1,28 +1,31 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
-import { Text, Card, Layout, Modal, Button, useTheme } from '@ui-kitten/components';
+import { Text, Button, useTheme, Spinner } from '@ui-kitten/components';
 import { getTicketTypes } from '../../components/Database';
+
+type Hidden = { type: 'HIDDEN', isVisible: false };
+type Loading = { type: 'LOADING', isVisible: true };
+type Data = { type: 'DATA', isVisible: true, data: any[] };
+
+export type ModalState = Hidden | Loading | Data;
 
 export default function QrReader({
   itemToValidate,
   markAsUsed,
-  hasPermission,
   setScanned,
-  modalVisiblity,
-  setModalVisiblity,
-  responseToModal,
-  dataToModal,
+  modalState,
+  setModalState,
   scanned,
   handleBarCodeScanned
 }: any) {
 
   return (
     <View style={styles.container}>
-      <ScannedModal modalVisiblity={modalVisiblity} setModalVisiblity={setModalVisiblity}
-        setScanned={setScanned} responseToModal={responseToModal} itemToValidate={itemToValidate} markAsUsed={markAsUsed}
-        dataToModal={dataToModal} />
-      {/* <ScannedModal /> */}
+      {modalState.isVisible && <ScannedModal setModalState={setModalState}
+        setScanned={setScanned} itemToValidate={itemToValidate} markAsUsed={markAsUsed}
+        dataToModal={modalState}
+      />}
       <BarCodeScanner
         onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
         style={[StyleSheet.absoluteFill, styles.camera]}>
@@ -38,45 +41,48 @@ export default function QrReader({
   );
 }
 
-function ScannedModal({ modalVisiblity, setModalVisiblity, setScanned, responseToModal, itemToValidate, markAsUsed, dataToModal }: any) {
+function ScannedModal({ setModalState, setScanned, itemToValidate, markAsUsed, dataToModal }: any) {
   const theme = useTheme();
   const ticket_pieces = getTicketTypes();
   // function ScannedModal() {
   // const [modalVisiblity, setModalVisiblity] = useState(false);
   return (
-    <Layout style={styles.container} level='1'>
-      <Modal visible={modalVisiblity} style={styles.modalContainer}>
-        <View style={[styles.modalWindow, { backgroundColor: theme[`color-${dataToModal[0]}-200`], borderColor: theme[`color-${dataToModal[0]}-default`] }]}>
-          {dataToModal ?
+    <View style={styles.modalContainer}>
+      {dataToModal.type === 'DATA' &&
+        <View style={[styles.modalWindow, { backgroundColor: theme[`color-${dataToModal.data[0]}-200`], borderColor: theme[`color-${dataToModal.data[0]}-default`] }]}>
             <React.Fragment>
               <Text
                 category='h2'
-                style={[styles.title, { backgroundColor: theme[`color-${dataToModal[0]}-default`] }]}
-              >{dataToModal[1]}</Text>
+                style={[styles.title, { backgroundColor: theme[`color-${dataToModal.data[0]}-default`] }]}
+              >{dataToModal.data[1]}</Text>
               <View style={{ paddingStart: 5 }}>
-                <Text category='h3' >{dataToModal[2]}</Text>
-                {ticket_pieces && <Text category='h5'>{ticket_pieces.find(item => item.key === itemToValidate)?.title} - {dataToModal[3]}</Text>}
+                <Text category='h3' >{dataToModal.data[2]}</Text>
+                {ticket_pieces && <Text category='h5'>{ticket_pieces.find(item => item.key === itemToValidate)?.title} - {dataToModal.data[3]}</Text>}
               </View>
+              <View style={[styles.spacer, { backgroundColor: theme[`color-${dataToModal.data[0]}-default`] }]}></View>
             </React.Fragment>
-            :
-            <Text>Loading</Text>
-          }
-          <View style={[styles.spacer, { backgroundColor: theme[`color-${dataToModal[0]}-default`] }]}></View>
-          <View style={{ alignItems: 'center' }}>
+            <View style={{ alignItems: 'center' }}>
             <Button
               style={{ marginBottom: 5, width: '60%' }}
               status='primary'
               onPress={() => {
-                setModalVisiblity(false);
+                setModalState({ type: 'HIDDEN', isVisible: false });
                 setScanned(false);
               }}>
               Close
             </Button>
           </View>
         </View>
-      </Modal>
-
-    </Layout>
+      }
+      { dataToModal.type === 'LOADING' && 
+        <View style={[styles.modalWindow, { backgroundColor: theme['background-basic-color-1'] }]}>
+          <Text category='h2' style={[styles.title, { color: theme['text-basic-color'], textAlign: 'center' }]}>Loading</Text>
+          <View style={{ alignItems: 'center', paddingBottom: 10 }}>
+            <Spinner size='giant' />
+          </View>
+        </View>
+      }
+    </View>
   );
 }
 
@@ -122,7 +128,11 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255, 255, 255, 0.5)',
     width: '100%', height: '100%',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    position: 'absolute',
+    zIndex: 99,
+    top: 0,
+    left: 0
   },
   modalWindow: {
     borderWidth: 2,
