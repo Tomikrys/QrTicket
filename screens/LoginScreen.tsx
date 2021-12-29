@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, View, Image } from 'react-native';
 import { Button, Text, Input, Tooltip } from '@ui-kitten/components';
 import { validateEntryCode } from '../components/Database';
+import { whileStatement } from '@babel/types';
 
 export default function LoginScreen({ navigation }) {
   const [visible, setVisible] = React.useState(false);
@@ -22,7 +23,7 @@ export default function LoginScreen({ navigation }) {
 
   const renderEntryInput = () => (
     <Input
-      placeholder='Type your entry code'
+      placeholder='Entry code'
       value={entryCode}
       autoCapitalize='characters'
       autoFocus={true}
@@ -65,20 +66,24 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 100,
     justifyContent: 'center',
-    flex: 1
+    flex: 1,
+    backgroundColor: 'black'
   },
   title: {
     fontSize: 42,
-    textAlign: 'center'
+    textAlign: 'center', 
+    color: 'white'
   },
   input: {
     borderRadius: 40,
+    backgroundColor: 'black',
+    textAlign: 'center'
   },
   inputText: {
     textAlign: 'center',
     fontSize: 20,
     paddingVertical: 7,
-    color: 'black',
+    color: 'white'
   },
   logoImg: {
     alignSelf: 'center',

@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Button, Text, Modal, Card, Divider, Toggle, Select, SelectItem, ViewPager, Layout, TabBar, Tab } from '@ui-kitten/components';
 
-export default function ModalTicketEditor({selectedTicket, onClose, visible}: any) {
+export default function ModalTicketEditor({ selectedTicket, onClose, visible }: any) {
   const Header = (props: any) => (
     <View {...props}>
       <Text category='h3'>{selectedTicket.name}</Text>
@@ -30,7 +30,7 @@ export default function ModalTicketEditor({selectedTicket, onClose, visible}: an
   );
 
   function CardAccessoriesShowcase() {
-    const options = [ "--", "Meat", "Vege" ];
+    const options = ["--", "Meat", "Vege"];
     const [selectedOption, setSelectedOption] = React.useState(0);
     const [checked, setChecked] = React.useState(false);
     const [selectedPage, setSelectedPage] = React.useState(0);
@@ -38,86 +38,86 @@ export default function ModalTicketEditor({selectedTicket, onClose, visible}: an
 
     return (
       <Card style={styles.card} header={Header} footer={Footer}>
-        <View style={ styles.bodyContainer }>
+        <View style={styles.bodyContainer}>
           <Text>Registration:</Text>
-          <Text style={{ textTransform: 'capitalize' }}>{ selectedTicket.registration }</Text>
+          <Text style={{ textTransform: 'capitalize' }}>{selectedTicket.registration}</Text>
         </View>
-        <View style={[ styles.bodyContainer, { marginBottom: 12 } ]}>
+        <View style={[styles.bodyContainer, { marginBottom: 12 }]}>
           <Text>Balance:</Text>
-          <Text>{ selectedTicket.balance } CZK</Text>
+          <Text>{selectedTicket.balance} CZK</Text>
         </View>
 
         <Divider />
         <TabBar
           selectedIndex={selectedPage}
           onSelect={index => setSelectedPage(index)}>
-          <Tab title='Friday'/>
-          <Tab title='Saturday'/>
-          <Tab title='Sunday'/>
+          <Tab title='Friday' />
+          <Tab title='Saturday' />
+          <Tab title='Sunday' />
         </TabBar>
 
         <ViewPager selectedIndex={selectedPage} shouldLoadComponent={shouldLoadComponent}>
-          <Layout level='2' style={{ backgroundColor: 'white' }}>
+          <Layout level='2' style={styles.kittenUiBackground}>
             <Divider />
-            <View style={ styles.bodyContainer }>
+            <View style={styles.bodyContainer}>
               <Text category='h6'>Dinner:</Text>
               <Select
                 style={{ padding: 4, flexGrow: 1, marginLeft: 8 }}
-                value={ options[selectedOption] }
+                value={options[selectedOption]}
                 onSelect={index => setSelectedOption(index.row)}>
                 { options.map((item, index) => (<SelectItem title={item} key={index} />)) }
               </Select>
             </View>
           </Layout>
-          <Layout level='2' style={{ backgroundColor: 'white' }}>
-          <Divider />
-            <View style={ styles.bodyContainer }>
+          <Layout level='2' style={styles.kittenUiBackground}>
+            <Divider />
+            <View style={styles.bodyContainer}>
               <Text category='h6'>Breakfast:</Text>
               <Toggle checked={checked} onChange={setChecked} style={{ padding: 4 }} />
             </View>
             <Divider />
-            <View style={ styles.bodyContainer }>
+            <View style={styles.bodyContainer}>
               <Text category='h6'>Lunch:</Text>
               <Select
                 style={{ padding: 4, flexGrow: 1, marginLeft: 8 }}
-                value={ options[selectedOption] }
+                value={options[selectedOption]}
                 onSelect={index => setSelectedOption(index.row)}>
                 { options.map((item, index) => (<SelectItem title={item} key={index} />)) }
               </Select>
             </View>
             <Divider />
-            <View style={ styles.bodyContainer }>
+            <View style={styles.bodyContainer}>
               <Text category='h6'>Dinner:</Text>
               <Select
                 style={{ padding: 4, flexGrow: 1, marginLeft: 8 }}
-                value={ options[selectedOption] }
+                value={options[selectedOption]}
                 onSelect={index => setSelectedOption(index.row)}>
                 { options.map((item, index) => (<SelectItem title={item} key={index} />)) }
               </Select>
             </View>
           </Layout>
-          <Layout level='2' style={{ backgroundColor: 'white' }}>
-          <Divider />
-            <View style={ styles.bodyContainer }>
+          <Layout level='2' style={styles.kittenUiBackground} >
+            <Divider />
+            <View style={styles.bodyContainer}>
               <Text category='h6'>Breakfast:</Text>
               <Toggle checked={checked} onChange={setChecked} style={{ padding: 4 }} />
             </View>
             <Divider />
-            <View style={ styles.bodyContainer }>
+            <View style={styles.bodyContainer}>
               <Text category='h6'>Lunch:</Text>
               <Select
                 style={{ padding: 4, flexGrow: 1, marginLeft: 8 }}
-                value={ options[selectedOption] }
+                value={options[selectedOption]}
                 onSelect={index => setSelectedOption(index.row)}>
                 { options.map((item, index) => (<SelectItem title={item} key={index} />)) }
               </Select>
             </View>
             <Divider />
-            <View style={ styles.bodyContainer }>
+            <View style={styles.bodyContainer}>
               <Text category='h6'>Dinner:</Text>
               <Select
                 style={{ padding: 4, flexGrow: 1, marginLeft: 8 }}
-                value={ options[selectedOption] }
+                value={options[selectedOption]}
                 onSelect={index => setSelectedOption(index.row)}>
                 { options.map((item, index) => (<SelectItem title={item} key={index} />)) }
               </Select>
@@ -140,6 +140,9 @@ export default function ModalTicketEditor({selectedTicket, onClose, visible}: an
 }
 
 const styles = StyleSheet.create({
+  kittenUiBackground: {
+    backgroundColor: '#222B45'
+  },
   topContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',

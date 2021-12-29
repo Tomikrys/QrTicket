@@ -128,7 +128,7 @@ export default function QrScreen({ ticketType, markTicketAsUsed, hasPermission, 
 
   const Content = () => (
     <View style={styles.container}>
-      <Text style={{ position: 'absolute', top: 0, zIndex: 100, fontSize: 30, width: '100%', textAlign: 'center', padding: 7, backgroundColor: 'white' }}>{ticketType.title}</Text>
+      <Text style={styles.title}>{ticketType.title}</Text>
       <QrReader
         itemToValidate={ticketType.key}
         markAsUsed={markTicketAsUsed}
@@ -170,7 +170,7 @@ export default function QrScreen({ ticketType, markTicketAsUsed, hasPermission, 
   }
 
   return (
-    <DrawerR.Navigator initialRouteName='QRScreen' backBehavior='initialRoute' screenOptions={{ drawerPosition: 'right', drawerStyle: { width: '90%' }, headerShown: false }} drawerContent={(props) => <CustomDrawerContent {...props} />}>
+    <DrawerR.Navigator initialRouteName='QRScreen' backBehavior='initialRoute' screenOptions={{ drawerPosition: 'right', drawerStyle: { width: '90%', backgroundColor: 'black' }, headerShown: false }} drawerContent={(props) => <CustomDrawerContent {...props} />}>
       <DrawerR.Screen
         name='QRScreen'
         component={Content}
@@ -182,6 +182,20 @@ export default function QrScreen({ ticketType, markTicketAsUsed, hasPermission, 
 
 
 const styles = StyleSheet.create({
+  title: {
+    position: 'absolute',
+    top: 0,
+    zIndex: 100,
+    fontSize: 30,
+    width: '100%',
+    textAlign: 'center',
+    padding: 7,
+    color: 'white',
+    backgroundColor: 'black',
+    borderBottomColor: 'grey',
+    borderBottomWidth: 2,
+    borderRadius: 10
+  },
   container: {
     flex: 1,
     width: '100%',

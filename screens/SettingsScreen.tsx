@@ -22,7 +22,7 @@ export default function SettingsScreen({ticketType, markTicketAsUsed, setTicketT
         <View style={styles.container}>
             <TopNavigation
                 style={{ elevation: 5 }}
-                title={() => <Text style={{flex: 1, textAlign: 'center', fontSize: 20 }}>Choose ticket type to scan</Text>}
+                title={() => <Text style={{flex: 1, textAlign: 'center', fontSize: 25 }}>Choose ticket type to scan</Text>}
             />
             <Divider />
             <ScrollView contentContainerStyle={styles.cardBoxContent}>
@@ -50,13 +50,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: '100%',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    backgroundColor: 'black'
   },
   cardBoxContent: {
     justifyContent: 'center',
     flex: 1,
     width: '100%',
-    backgroundColor: '#eee'
+    backgroundColor: 'black'
   },
   cardText: {
     textAlign: 'center',

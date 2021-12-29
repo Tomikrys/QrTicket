@@ -3,6 +3,8 @@ import { View, StyleSheet } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import { Text, Button, useTheme, Spinner } from '@ui-kitten/components';
 import { getTicketTypes } from '../../components/Database';
+import { color } from 'react-native-reanimated';
+import { Background } from '@react-navigation/elements';
 
 type Hidden = { type: 'HIDDEN', isVisible: false };
 type Loading = { type: 'LOADING', isVisible: true };
@@ -94,7 +96,8 @@ const styles = StyleSheet.create({
     right: 0,
     top: 0,
     bottom: 0,
-    position: 'absolute'
+    position: 'absolute',
+    backgroundColor: 'black'
   },
   camera: {
     flex: 1,
@@ -147,8 +150,11 @@ const styles = StyleSheet.create({
     marginTop: 5
   },
   title: {
-    color: 'white',
+    backgroundColor: 'black',
     padding: 3,
     paddingStart: 10
+  },
+  textBlack: {
+    color: 'black',
   }
 });
