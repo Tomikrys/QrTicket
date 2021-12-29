@@ -55,15 +55,15 @@ function ScannedModal({ setModalState, setScanned, itemToValidate, markAsUsed, d
             <React.Fragment>
               <Text
                 category='h2'
-                style={[styles.title, { backgroundColor: theme[`color-${dataToModal.data[0]}-default`] }]}
+                style={[styles.title, styles.textBlack, { backgroundColor: theme[`color-${dataToModal.data[0]}-default`] }]}
               >{dataToModal.data[1]}</Text>
               <View style={{ paddingStart: 5 }}>
-                <Text category='h3' >{dataToModal.data[2]}</Text>
-                {ticket_pieces && <Text category='h5'>{ticket_pieces.find(item => item.key === itemToValidate)?.title} - {dataToModal.data[3]}</Text>}
+                <Text category='h3' style={styles.textBlack}>{dataToModal.data[2]}</Text>
+                {ticket_pieces && <Text category='h5' style={styles.textBlack}>{ticket_pieces.find(item => item.key === itemToValidate)?.title} - {dataToModal.data[3]}</Text>}
               </View>
               <View style={[styles.spacer, { backgroundColor: theme[`color-${dataToModal.data[0]}-default`] }]}></View>
             </React.Fragment>
-            <View style={{ alignItems: 'center' }}>
+            <View style={{alignItems: 'center'}}>
             <Button
               style={{ marginBottom: 5, width: '60%' }}
               status='primary'
