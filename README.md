@@ -2,6 +2,9 @@
 
 Mobile application for event tickets managing.
 
+## Link to git
+[https://github.com/Tomikrys/QrTicket](https://github.com/Tomikrys/QrTicket)
+
 ## To run the app locally
 
 ### Install expo to your mobile phone or emulator:
@@ -78,4 +81,3 @@ Password	gp77l7vqtdg3iqi6
 Port		3306	
 Database	fhg6lye7nr6gxocf
 ```
-
