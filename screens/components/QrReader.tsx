@@ -1,3 +1,11 @@
+/*
+ *
+ * Project: QrTicket mobile app
+ * Date: December 2021
+ * Authors: Tomas Rysavy, Filip Jerabek, Tomas Vostrejz, Petr Stehlik
+ *
+ */
+
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
@@ -22,6 +30,7 @@ export default function QrReader({
   handleBarCodeScanned
 }: any) {
 
+  // Render the content
   return (
     <View style={styles.container}>
       {modalState.isVisible && <ScannedModal setModalState={setModalState}
@@ -43,11 +52,13 @@ export default function QrReader({
   );
 }
 
+// Alert modal for information about scanning result
 function ScannedModal({ setModalState, setScanned, itemToValidate, markAsUsed, dataToModal }: any) {
   const theme = useTheme();
   const ticket_pieces = getTicketTypes();
   // function ScannedModal() {
   // const [modalVisiblity, setModalVisiblity] = useState(false);
+  // Render the content of alert modal
   return (
     <View style={styles.modalContainer}>
       {dataToModal.type === 'DATA' &&
@@ -89,6 +100,8 @@ function ScannedModal({ setModalState, setScanned, itemToValidate, markAsUsed, d
 }
 
 // {scanned && <Button title={'Tap to Scan Again'} onPress={() => setScanned(false)} />}
+
+// Styles
 const opacity = 'rgba(0, 0, 0, .4)';
 const styles = StyleSheet.create({
   container: {

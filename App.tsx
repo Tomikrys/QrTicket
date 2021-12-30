@@ -1,3 +1,11 @@
+/*
+ *
+ * Project: QrTicket mobile app
+ * Date: December 2021
+ * Authors: Tomas Rysavy, Filip Jerabek, Tomas Vostrejz, Petr Stehlik
+ *
+ */
+
 import React from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 

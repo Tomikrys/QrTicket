@@ -1,3 +1,11 @@
+/*
+ *
+ * Project: QrTicket mobile app
+ * Date: December 2021
+ * Authors: Tomas Rysavy, Filip Jerabek, Tomas Vostrejz, Petr Stehlik
+ *
+ */
+
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Button, Text, Modal, Card } from '@ui-kitten/components';
@@ -47,6 +55,7 @@ export default function ModalTicketValidator(properties: any) {
   );
 }
 
+// Styles
 const styles = StyleSheet.create({
   text: {
     color: 'black'

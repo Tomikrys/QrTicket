@@ -1,3 +1,11 @@
+/*
+ *
+ * Project: QrTicket mobile app
+ * Date: December 2021
+ * Authors: Tomas Rysavy, Filip Jerabek, Tomas Vostrejz, Petr Stehlik
+ *
+ */
+
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Button, Text, Modal, Card, Divider, Toggle, Select, SelectItem, ViewPager, Layout, TabBar, Tab } from '@ui-kitten/components';
@@ -139,6 +147,7 @@ export default function ModalTicketEditor({ selectedTicket, onClose, visible }: 
   );
 }
 
+// Styles
 const styles = StyleSheet.create({
   kittenUiBackground: {
     backgroundColor: '#222B45'

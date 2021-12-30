@@ -1,3 +1,11 @@
+/*
+ *
+ * Project: QrTicket mobile app
+ * Date: December 2021
+ * Authors: Tomas Rysavy, Filip Jerabek, Tomas Vostrejz, Petr Stehlik
+ *
+ */
+
 import { ColorSchemeName, useColorScheme as _useColorScheme } from 'react-native';
 
 // The useColorScheme value is always either light or dark, but the built-in

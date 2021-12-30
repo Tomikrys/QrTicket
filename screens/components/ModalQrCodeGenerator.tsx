@@ -1,3 +1,11 @@
+/*
+ *
+ * Project: QrTicket mobile app
+ * Date: December 2021
+ * Authors: Tomas Rysavy, Filip Jerabek, Tomas Vostrejz, Petr Stehlik
+ *
+ */
+
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Button, Text, Modal, Card, Layout, useTheme } from '@ui-kitten/components';
@@ -7,6 +15,7 @@ export default function ModalQrCodeGenerator({ modalVisiblity, setModalVisiblity
   const theme = useTheme();
   // function ScannedModal() {
   // const [modalVisiblity, setModalVisiblity] = useState(false);
+  // Render the content of modal
   return (
     <Layout style={styles.container} level='1'>
       <Modal visible={modalVisiblity} style={styles.modalContainer}>
@@ -35,6 +44,7 @@ export default function ModalQrCodeGenerator({ modalVisiblity, setModalVisiblity
   );
 }
 
+// Styles
 const styles = StyleSheet.create({
   modalWindow: {
     paddingBottom: 10, 

@@ -1,3 +1,11 @@
+/*
+ *
+ * Project: QrTicket mobile app
+ * Date: December 2021
+ * Authors: Tomas Rysavy, Filip Jerabek, Tomas Vostrejz, Petr Stehlik
+ *
+ */
+
 import React from 'react';
 import { getListOfTickets, isAdmin } from '../components/Database';
 import { Button, Text, Divider, Input, Icon, List, ListItem, TopNavigation } from '@ui-kitten/components';
@@ -15,46 +23,47 @@ export default function TicketsScreen({ manualValidation }: any) {
   const [qrGeneratorModalVisiblity, setQrGeneratorModalVisiblity] = React.useState(false);
   const [person, setPerson] = React.useState(null);
 
+  // Icons
   const renderItemIcon = (props: any) => (
     <Icon {...props} name='person' />
   );
   const EditIcon = (props: any) => (
     <Icon {...props} name='edit-outline' />
   );
-
   const ValidateIcon = (props: any) => (
     <Icon {...props} name='person-done-outline' />
   );
 
-
+  // Render the options buttons for item 
   const renderItemEditAndValidate = (props: any, item: any) => (
     <>
       <Button size='small' status='info' accessoryLeft={EditIcon} style={styles.editButton} onPress={() => { selectTicket(item); setEditorVisible(true); }}></Button>
       <Button size='small' status='success' accessoryLeft={ValidateIcon} style={styles.editButton} onPress={() => { manualValidation(item.ID); }}></Button>
     </>
   );
-  const renderItemValidate = (props: any, item: any) => (
+  const renderItemOnlyValidate = (props: any, item: any) => (
     <Button size='small' status='success' accessoryLeft={ValidateIcon} style={styles.editButton} onPress={() => { manualValidation(item.ID); }}></Button>
   );
 
   function onSelectTicketShowQr(item: any) {
     setPerson(item);
     setQrGeneratorModalVisiblity(true);
-
   }
 
+  // Render the item with person informations and options in the list
   const renderItem = ({ item, index }: any) => (
     <ListItem
       key={index}
       title={() => <Text style={styles.listItemTitle}>{item.name}</Text>}
       description={item.ID}
       accessoryLeft={renderItemIcon}
-      accessoryRight={(props) => isAdmin() ? renderItemEditAndValidate(props, item) : renderItemValidate(props, item)}
+      accessoryRight={(props) => isAdmin() ? renderItemEditAndValidate(props, item) : renderItemOnlyValidate(props, item)}
       onPress={() => { selectTicket(item); onSelectTicketShowQr(item); }}
       style={styles.listItem}
     />
   );
 
+  // Render the screen content
   return (
     <>
       <View style={{
@@ -83,6 +92,7 @@ export default function TicketsScreen({ manualValidation }: any) {
   );
 };
 
+// Search bar element constructor
 function SearchBar({ setSearchedTickets, allTickets }: any) {
   const [value, setValue] = React.useState('');
 
@@ -110,6 +120,7 @@ function SearchBar({ setSearchedTickets, allTickets }: any) {
     }
   };
 
+  // Render the element
   return (
     <Input
       value={value}
@@ -124,6 +135,7 @@ function SearchBar({ setSearchedTickets, allTickets }: any) {
   );
 }
 
+// Styles
 const styles = StyleSheet.create({
   list: {
     width: '100%',
@@ -159,7 +171,7 @@ const styles = StyleSheet.create({
   },
 });
 
-
+// Helper function for removing the diacritics from search user-text-content
 function removeDiacritics(str: any) {
   var defaultDiacriticsRemovalMap = [
     { 'base': 'a', 'letters': /[áä]/g },

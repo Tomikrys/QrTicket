@@ -1,3 +1,11 @@
+/*
+ *
+ * Project: QrTicket mobile app
+ * Date: December 2021
+ * Authors: Tomas Rysavy, Filip Jerabek, Tomas Vostrejz, Petr Stehlik
+ *
+ */
+
 import React from 'react';
 import { BottomNavigation, BottomNavigationTab, Icon, Text, Divider, TopNavigation, Card, useTheme, Button } from '@ui-kitten/components';
 import { ScrollView, StyleSheet, View } from 'react-native';
@@ -9,16 +17,18 @@ export interface TicketType {
 
 export default function SettingsScreen({ticketType, markTicketAsUsed, setTicketType, setMarkTicketAsUsed, ticketTypes}: any) {
 
-    const ValidateIcon = (props: any) => (
-      <Icon {...props} name='eye-outline'/>
-    );
+  const ValidateIcon = (props: any) => (
+    <Icon {...props} name='eye-outline'/>
+  );
 
-    const CheckInIcon = (props: any) => (
-      <Icon {...props} name='checkmark-circle-2-outline'/>
-    );
+  const CheckInIcon = (props: any) => (
+    <Icon {...props} name='checkmark-circle-2-outline'/>
+  );
 
-    const theme = useTheme();
-    return (
+  const theme = useTheme();
+    
+  // Render the screen content
+  return (
         <View style={styles.container}>
             <TopNavigation
                 style={{ elevation: 5 }}
@@ -43,9 +53,10 @@ export default function SettingsScreen({ticketType, markTicketAsUsed, setTicketT
               <BottomNavigationTab title='Also mark as used' icon={CheckInIcon}/>
             </BottomNavigation>
         </View>
-    );
+  );
 };
 
+// Styles
 const styles = StyleSheet.create({
   container: {
     flex: 1,

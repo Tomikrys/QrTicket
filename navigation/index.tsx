@@ -1,3 +1,11 @@
+/*
+ *
+ * Project: QrTicket mobile app
+ * Date: December 2021
+ * Authors: Tomas Rysavy, Filip Jerabek, Tomas Vostrejz, Petr Stehlik
+ *
+ */
+
 import React, { useEffect, useState } from 'react';
 import QrScreen, { CameraState } from '../screens/QrScreen';
 import LoginScreen from '../screens/LoginScreen';
@@ -17,6 +25,7 @@ export default function Navigator() {
   const [markTicketAsUsed, setMarkTicketAsUsed] = React.useState(0);
   const [hasPermission, setHasPermission] = useState<CameraState>({ type: 'LOADING' });
 
+  // Getting the camera permission
   useEffect(() => {
     let permissionNeeded = true;
 
@@ -27,14 +36,17 @@ export default function Navigator() {
     return () => { permissionNeeded = false };
   }, []);
 
+  // Scanning screen content
   const QrScreenContent = () => (
     <QrScreen ticketType={ticketType} markTicketAsUsed={markTicketAsUsed} hasPermission={hasPermission} setHasPermission={setHasPermission} />
   )
 
+  // Left drawer content
   const Settings = () => (
     <SettingsScreen ticketType={ticketType} markTicketAsUsed={markTicketAsUsed} setTicketType={setTicketType} setMarkTicketAsUsed={setMarkTicketAsUsed} ticketTypes={ticketTypes}/>
   )
 
+  // Make the left drawer and login/scanning screen navigation
   return (
   //  onStateChange={(state) => console.log('New state is', state)}
   <NavigationContainer>

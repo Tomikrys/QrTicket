@@ -1,3 +1,11 @@
+/*
+ *
+ * Project: QrTicket mobile app
+ * Date: December 2021
+ * Authors: Tomas Rysavy, Filip Jerabek, Tomas Vostrejz, Petr Stehlik
+ *
+ */
+
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, useWindowDimensions, KeyboardAvoidingView, View, Alert } from 'react-native';
 import QrReader, { ModalState } from './components/QrReader';
@@ -25,13 +33,13 @@ export default function QrScreen({ ticketType, markTicketAsUsed, hasPermission, 
   // FROM QrReader.tsx
   // ######################################################
   const [scanned, setScanned] = useState(false);
-  //data shown in modal
+  // data shown in modal
   const [modalState, setModalState] = useState<ModalState>({ type: 'HIDDEN', isVisible: false });
 
   const itemToValidate = ticketType.key;
   const [manualValidationValue, setManualValidationValue] = React.useState('');
 
-  // handler when bacrode is scanned
+  // handler when barcode is scanned
   const handleBarCodeScanned = ({ type, data }: any) => {
     setModalState({ type: 'LOADING', isVisible: true });
     fetchAndDisplayModal(data);
@@ -44,7 +52,7 @@ export default function QrScreen({ ticketType, markTicketAsUsed, hasPermission, 
     // alert(`Bar code with type ${type} and data ${data} has been scanned! Chosen ${itemToValidate} doslo zpet ${JSON.stringify(responseToModal)}`);
   };
 
-  //fetch all data about one user - user ID is data scanned from QR code
+  // fetch all data about one user - user ID is data scanned from QR code
   const fetchUserData = (user: any) => {
     fetch(`https://sjezd-qr-ticket.herokuapp.com/get/${user}`)
       .then((res) => res.json())
@@ -73,7 +81,7 @@ export default function QrScreen({ ticketType, markTicketAsUsed, hasPermission, 
     }
   }
 
-  //function gets object from server and checks if the required ticket is valid/used...
+  // function gets object from server and checks if the required ticket is valid/used...
   function validateTicket(user_data: any, ticketInterest: any) {
     if (!user_data) {
       return "error";
@@ -94,6 +102,7 @@ export default function QrScreen({ ticketType, markTicketAsUsed, hasPermission, 
 
   // ######################################################
 
+  // Camera permission alert
   if (hasPermission.type === 'DENIED') {
     return (
       <View style={{ height: '100%', justifyContent: 'center' }}>
@@ -105,9 +114,7 @@ export default function QrScreen({ ticketType, markTicketAsUsed, hasPermission, 
         }}>Done</Button>
       </View>
     );
-  }
-
-  if (hasPermission.type === 'LOADING') {
+  } else if (hasPermission.type === 'LOADING') {
     return (
       <View style={{ flex: 1, height: '100%', justifyContent: 'center', alignItems: 'center' }}>
         <Spinner size='giant' />
@@ -115,7 +122,8 @@ export default function QrScreen({ ticketType, markTicketAsUsed, hasPermission, 
     );
   }
 
-  const clearSearchBar = () => {
+  // Clear manual validation input
+  const clearManualValidationInput = () => {
     setManualValidationValue('');
   };
 
@@ -126,6 +134,7 @@ export default function QrScreen({ ticketType, markTicketAsUsed, hasPermission, 
     // }
   }
 
+  // Render the screen content
   const Content = () => (
     <View style={styles.container}>
       <Text style={styles.title}>{ticketType.title}</Text>
@@ -140,7 +149,7 @@ export default function QrScreen({ ticketType, markTicketAsUsed, hasPermission, 
       />
 
       {/* Manual Validation */}
-      <View style={styles.searchBox}>
+      <View style={styles.manualValidationBox}>
         <Input
           value={manualValidationValue}
           autoCapitalize='characters'
@@ -149,9 +158,9 @@ export default function QrScreen({ ticketType, markTicketAsUsed, hasPermission, 
           status='control'
           size='large'
           maxLength={10}
-          style={styles.searchBar}
-          textStyle={styles.searchBarText}
-          // onFocus={clearSearchBar}
+          style={styles.manualValidationInput}
+          textStyle={styles.manualValidationInputText}
+          // onFocus={clearManualValidationInput}
           onChangeText={nextValue => setManualValidationValue(nextValue)}
           onSubmitEditing={e => fetchAndDisplayModal(e.nativeEvent.text)}
         />
@@ -161,6 +170,7 @@ export default function QrScreen({ ticketType, markTicketAsUsed, hasPermission, 
     </View>
   )
 
+  // Right drawer content
   function CustomDrawerContent(props: any) {
     return (
       <KeyboardAvoidingView style={{ flex: 1 }} behavior='height' keyboardVerticalOffset={40}>
@@ -169,6 +179,7 @@ export default function QrScreen({ ticketType, markTicketAsUsed, hasPermission, 
     );
   }
 
+  // Render the screen with list of people in right drawer
   return (
     <DrawerR.Navigator initialRouteName='QRScreen' backBehavior='initialRoute' screenOptions={{ drawerPosition: 'right', drawerStyle: { width: '90%', backgroundColor: 'black' }, headerShown: false }} drawerContent={(props) => <CustomDrawerContent {...props} />}>
       <DrawerR.Screen
@@ -180,7 +191,7 @@ export default function QrScreen({ ticketType, markTicketAsUsed, hasPermission, 
   );
 }
 
-
+// Styles
 const styles = StyleSheet.create({
   title: {
     position: 'absolute',
@@ -203,17 +214,17 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     backgroundColor: 'black'
   },
-  searchBox: {
+  manualValidationBox: {
     backgroundColor: 'transparent',
     height: '80%',
     justifyContent: 'flex-end'
   },
-  searchBar: {
+  manualValidationInput: {
     width: '50%',
     alignSelf: 'center',
     backgroundColor: 'rgba(80,80,80,0.5)'
   },
-  searchBarText: {
+  manualValidationInputText: {
     textAlign: 'center',
   }
 });

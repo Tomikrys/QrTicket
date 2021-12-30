@@ -1,3 +1,11 @@
+/*
+ *
+ * Project: QrTicket mobile app
+ * Date: December 2021
+ * Authors: Tomas Rysavy, Filip Jerabek, Tomas Vostrejz, Petr Stehlik
+ *
+ */
+
 import React from 'react';
 import { StyleSheet, View, Image } from 'react-native';
 import { Button, Text, Input, Tooltip } from '@ui-kitten/components';
@@ -21,6 +29,7 @@ export default function LoginScreen({ navigation }) {
       setVisible(true);
   }
 
+  // Input for password entry
   const renderEntryInput = () => (
     <Input
       placeholder='Entry code'
@@ -38,6 +47,7 @@ export default function LoginScreen({ navigation }) {
       onSubmitEditing={confirmLogIn} />
   );
 
+  // Render the screen content
   return (
         <View style={styles.container}>
           <View>
@@ -62,6 +72,7 @@ export default function LoginScreen({ navigation }) {
   );
 }
 
+// Styles
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 100,
