@@ -6,15 +6,17 @@
  *
  */
 
-import React from 'react';
+import React, {useState, useContext}  from 'react';
 import { StyleSheet, View, Image } from 'react-native';
 import { Button, Text, Input, Tooltip } from '@ui-kitten/components';
 import { validateEntryCode } from '../components/Database';
 import { whileStatement } from '@babel/types';
+import { ThemeContext } from '../components/Themed';
 
 export default function LoginScreen({ navigation }) {
-  const [visible, setVisible] = React.useState(false);
-  const [entryCode, setEntryCode] = React.useState('');
+  const [visible, setVisible] = useState(false);
+  const [entryCode, setEntryCode] = useState('');
+  const themeContext = useContext(ThemeContext);
 
   function clearEntryCode() {
     setEntryCode('');
@@ -40,19 +42,27 @@ export default function LoginScreen({ navigation }) {
       status='info'
       maxLength={10}
       size='large'
-      style={styles.input}
-      textStyle={styles.inputText}
+      style={[styles.input, lightThemeBG()]}
+      textStyle={[styles.inputText, lightThemeColor()]}
       onFocus={clearEntryCode}
       onChangeText={nextValue => setEntryCode(nextValue)}
       onSubmitEditing={confirmLogIn} />
   );
 
+  // Function for getting right color scheme styles
+  function lightThemeBG() {
+    return themeContext.theme === 'light' ? styles.whiteBG : styles.blackBG;
+  };
+  function lightThemeColor() {
+    return themeContext.theme === 'light' ? styles.black : styles.white;
+  };
+
   // Render the screen content
   return (
-        <View style={styles.container}>
+        <View style={[styles.container, lightThemeBG()]}>
           <View>
             <Image style={styles.logoImg} source={require('../assets/images/icon.png')}/>
-            <Text style={styles.title}>
+            <Text style={[styles.title, lightThemeColor()]}>
               QR Ticket
             </Text>
           </View>
@@ -78,23 +88,31 @@ const styles = StyleSheet.create({
     paddingHorizontal: 100,
     justifyContent: 'center',
     flex: 1,
-    backgroundColor: 'black'
+  },
+  blackBG: {
+    backgroundColor: 'black',
+  },
+  whiteBG: {
+    backgroundColor: 'white',
+  },
+  black: {
+    color: 'black'
+  },
+  white: {
+    color: 'white'
   },
   title: {
     fontSize: 42,
     textAlign: 'center', 
-    color: 'white'
   },
   input: {
     borderRadius: 40,
-    backgroundColor: 'black',
     textAlign: 'center'
   },
   inputText: {
     textAlign: 'center',
     fontSize: 20,
     paddingVertical: 7,
-    color: 'white'
   },
   logoImg: {
     alignSelf: 'center',

@@ -14,24 +14,34 @@ import * as eva from '@eva-design/eva';
 import { ApplicationProvider, IconRegistry } from '@ui-kitten/components';
 import { EvaIconsPack } from '@ui-kitten/eva-icons';
 import { StatusBar } from 'react-native';
+import { ThemeContext } from './components/Themed';
 
 import Navigator from './navigation/';
 
 export default function App() {
   const isLoadingComplete = useCachedResources();
 
+  const [theme, setTheme] = React.useState('dark');
+
+  const toggleTheme = () => {
+    const nextTheme = theme === 'light' ? 'dark' : 'light';
+    setTheme(nextTheme);
+  };
+
   if (!isLoadingComplete) {
     return null;
   } else {
     return (
     <>
-      <ApplicationProvider {...eva} theme={eva.dark}>
-        <StatusBar hidden={false} backgroundColor='gray'/>
-        <IconRegistry icons={EvaIconsPack} />
-        <SafeAreaProvider>
-          <Navigator />
-        </SafeAreaProvider>
-      </ApplicationProvider>
+      <ThemeContext.Provider value={{ theme, toggleTheme }}>
+        <ApplicationProvider {...eva} theme={eva[theme]}>
+          <StatusBar hidden={false} backgroundColor='gray'/>
+          <IconRegistry icons={EvaIconsPack} />
+          <SafeAreaProvider>
+            <Navigator />
+          </SafeAreaProvider>
+        </ApplicationProvider>
+      </ThemeContext.Provider>
     </>
     );
   }

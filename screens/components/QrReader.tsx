@@ -110,7 +110,6 @@ const styles = StyleSheet.create({
     top: 0,
     bottom: 0,
     position: 'absolute',
-    backgroundColor: 'black'
   },
   camera: {
     flex: 1,

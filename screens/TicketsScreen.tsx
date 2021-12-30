@@ -6,22 +6,25 @@
  *
  */
 
-import React from 'react';
+import React, {useState, useContext} from 'react';
 import { getListOfTickets, isAdmin } from '../components/Database';
-import { Button, Text, Divider, Input, Icon, List, ListItem, TopNavigation } from '@ui-kitten/components';
+import { Button, Text, Divider, Input, Icon, List, ListItem, TopNavigation, useTheme } from '@ui-kitten/components';
 import { TouchableWithoutFeedback, StyleSheet, View } from 'react-native';
+import { ThemeContext } from '../components/Themed';
 
 import ModalTicketEditor from './components/ModalTicketEditor';
 import ModalQrCodeGenerator from './components/ModalQrCodeGenerator';
 
 export default function TicketsScreen({ manualValidation }: any) {
 
-  const [editorVisible, setEditorVisible] = React.useState(false);
-  const [selectedTicket, selectTicket] = React.useState(null);
+  const [editorVisible, setEditorVisible] = useState(false);
+  const [selectedTicket, selectTicket] = useState(null);
   const allTickets = getListOfTickets();
-  const [searchedTickets, setSearchedTickets] = React.useState(allTickets);
-  const [qrGeneratorModalVisiblity, setQrGeneratorModalVisiblity] = React.useState(false);
-  const [person, setPerson] = React.useState(null);
+  const [searchedTickets, setSearchedTickets] = useState(allTickets);
+  const [qrGeneratorModalVisiblity, setQrGeneratorModalVisiblity] = useState(false);
+  const [person, setPerson] = useState(null);
+  const themeContext = useContext(ThemeContext);
+  const theme = useTheme();
 
   // Icons
   const renderItemIcon = (props: any) => (
@@ -50,6 +53,11 @@ export default function TicketsScreen({ manualValidation }: any) {
     setQrGeneratorModalVisiblity(true);
   }
 
+  // Function for getting right color scheme styles
+  function lightThemeBG() {
+    return themeContext.theme === 'light' ? styles.whiteBG : styles.blackBG;
+  };
+
   // Render the item with person informations and options in the list
   const renderItem = ({ item, index }: any) => (
     <ListItem
@@ -59,31 +67,28 @@ export default function TicketsScreen({ manualValidation }: any) {
       accessoryLeft={renderItemIcon}
       accessoryRight={(props) => isAdmin() ? renderItemEditAndValidate(props, item) : renderItemOnlyValidate(props, item)}
       onPress={() => { selectTicket(item); onSelectTicketShowQr(item); }}
-      style={styles.listItem}
+      style={[styles.listItem, themeContext.theme === 'light' ? styles.listItemWhiteBorder : null]}
     />
   );
 
   // Render the screen content
   return (
     <>
-      <View style={{
-        flex: 1,
-        backgroundColor: 'black'
-      }}>
+      <View style={styles.content}>
         <TopNavigation
           style={{ elevation: 5 }}
           title={() => <Text style={{ flex: 1, textAlign: 'center', fontSize: 25 }}>List of tickets</Text>}
         />
         <Divider />
         <List
-          style={styles.list}
+          style={[styles.list, lightThemeBG()]}
           data={searchedTickets}
           renderItem={renderItem}
           ListEmptyComponent={<Text style={styles.emptyListText}>No tickets found!</Text>}
         />
         {(isAdmin() && selectedTicket != null) ? <ModalTicketEditor selectedTicket={selectedTicket} onClose={() => setEditorVisible(false)} visible={editorVisible} /> : <></>}
         <Divider />
-        <View style={{ elevation: 5, backgroundColor: 'black' }}>
+        <View style={[{ elevation: 5 }, lightThemeBG()]}>
           <SearchBar setSearchedTickets={setSearchedTickets} allTickets={allTickets} />
         </View>
       </View>
@@ -137,15 +142,27 @@ function SearchBar({ setSearchedTickets, allTickets }: any) {
 
 // Styles
 const styles = StyleSheet.create({
+  content: {
+    flex: 1
+  },
   list: {
     width: '100%',
-    backgroundColor: 'black',
     padding: 15,
     // paddingBottom: 60
+  },
+  blackBG: {
+    backgroundColor: 'black',
+  },
+  whiteBG: {
+    backgroundColor: 'white',
   },
   listItem: {
     margin: 5,
     borderRadius: 15,
+  },
+  listItemWhiteBorder: {
+    borderWidth: 1,
+    borderColor: '#ddd',
   },
   listItemTitle: {
     fontSize: 20
@@ -161,7 +178,6 @@ const styles = StyleSheet.create({
     alignSelf: 'center'
   },
   searchBar: {
-    backgroundColor: 'black',
     padding: 10,
     color: '#000',
     borderColor: '#aaa',

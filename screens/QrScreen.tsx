@@ -6,7 +6,7 @@
  *
  */
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { StyleSheet, useWindowDimensions, KeyboardAvoidingView, View, Alert } from 'react-native';
 import QrReader, { ModalState } from './components/QrReader';
 import { Text, Input, Spinner, Button } from '@ui-kitten/components';
@@ -14,6 +14,8 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import TicketsScreen from '../screens/TicketsScreen';
 import ModalTicketValidator from './components/ModalTicketValidator';
 import { BarCodeScanner } from 'expo-barcode-scanner';
+import Switch from 'expo-dark-mode-switch';
+import { ThemeContext } from '../components/Themed';
 
 type Granted = { type: 'GRANTED' };
 type Denied = { type: 'DENIED' };
@@ -24,6 +26,8 @@ export type CameraState = Granted | Denied | Loading;
 export default function QrScreen({ ticketType, markTicketAsUsed, hasPermission, setHasPermission }: any) {
   const DrawerR = createDrawerNavigator();
   const windowWidth = useWindowDimensions().width;
+  const themeContext = useContext(ThemeContext);
+  const [lightTheme, setTheme] = useState(themeContext.theme === 'dark');
 
   const manualValidationfromList = (id: string) => {
     fetchAndDisplayModal(id);
@@ -134,10 +138,21 @@ export default function QrScreen({ ticketType, markTicketAsUsed, hasPermission, 
     // }
   }
 
+  function toggleTheme(theme) {
+    setTheme(theme);
+    themeContext.toggleTheme();
+  }
+
+  // Function for getting right color scheme styles
+  function getThemeStyles() {
+    return themeContext.theme === 'light' ? styles.light : styles.dark;
+  };
+
   // Render the screen content
   const Content = () => (
-    <View style={styles.container}>
-      <Text style={styles.title}>{ticketType.title}</Text>
+    <View style={[styles.container, getThemeStyles()]}>
+      <Text style={[styles.title, getThemeStyles()]}>{ticketType.title}</Text>
+      <Switch style={styles.toggle} value={lightTheme} onChange={theme => toggleTheme(theme)} />
       <QrReader
         itemToValidate={ticketType.key}
         markAsUsed={markTicketAsUsed}
@@ -201,11 +216,21 @@ const styles = StyleSheet.create({
     width: '100%',
     textAlign: 'center',
     padding: 7,
+  },
+  dark: {
     color: 'white',
-    backgroundColor: 'black',
-    borderBottomColor: 'grey',
-    borderBottomWidth: 2,
-    borderRadius: 10
+    backgroundColor: '#222B45',
+  },
+  light: {
+    color: 'black',
+    backgroundColor: 'white',
+  },
+  toggle: {
+    position: 'absolute',
+    right: 10,
+    top: 5,
+    zIndex: 110,
+    padding: 7,
   },
   container: {
     flex: 1,

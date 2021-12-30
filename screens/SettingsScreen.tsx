@@ -6,9 +6,10 @@
  *
  */
 
-import React from 'react';
+import React, {useContext} from 'react';
 import { BottomNavigation, BottomNavigationTab, Icon, Text, Divider, TopNavigation, Card, useTheme, Button } from '@ui-kitten/components';
 import { ScrollView, StyleSheet, View } from 'react-native';
+import { ThemeContext } from '../components/Themed';
 
 export interface TicketType {
   key: string,
@@ -26,16 +27,22 @@ export default function SettingsScreen({ticketType, markTicketAsUsed, setTicketT
   );
 
   const theme = useTheme();
-    
+  const themeContext = useContext(ThemeContext);
+
+  // Function for getting right color scheme styles
+  function lightThemeBG() {
+    return themeContext.theme === 'light' ? styles.whiteBG : styles.blackBG;
+  };
+
   // Render the screen content
   return (
-        <View style={styles.container}>
+        <View style={[styles.container, lightThemeBG()]}>
             <TopNavigation
                 style={{ elevation: 5 }}
                 title={() => <Text style={{flex: 1, textAlign: 'center', fontSize: 25 }}>Choose ticket type to scan</Text>}
             />
             <Divider />
-            <ScrollView contentContainerStyle={styles.cardBoxContent}>
+            <ScrollView contentContainerStyle={[styles.cardBoxContent, lightThemeBG()]}>
             {ticketTypes.map((obj: TicketType, idx: number) =>
               <Card key={obj.key} style={[ styles.card, (ticketType.key === obj.key) && { backgroundColor: theme['color-primary-default'] } ]} onPress={() => { setTicketType(obj); }}>
                 <Text style={[ styles.cardText, (ticketType.key === obj.key) && { color: 'white' } ]}>{obj.title}</Text>
@@ -62,13 +69,17 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
     justifyContent: 'center',
-    backgroundColor: 'black'
+  },
+  blackBG: {
+    backgroundColor: 'black',
+  },
+  whiteBG: {
+    backgroundColor: 'white',
   },
   cardBoxContent: {
     justifyContent: 'center',
     flex: 1,
     width: '100%',
-    backgroundColor: 'black'
   },
   cardText: {
     textAlign: 'center',
