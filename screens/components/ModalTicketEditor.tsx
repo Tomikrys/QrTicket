@@ -150,7 +150,7 @@ export default function ModalTicketEditor({ selectedTicket, onClose, visible }: 
 // Styles
 const styles = StyleSheet.create({
   kittenUiBackground: {
-    backgroundColor: '#222B45'
+    backgroundColor: 'transparent'
   },
   topContainer: {
     flexDirection: 'row',

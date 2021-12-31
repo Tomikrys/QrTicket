@@ -122,7 +122,6 @@ const styles = StyleSheet.create({
     bottom: 0,
     position: 'absolute',
     backgroundColor: 'transparent',
-    flexDirection: 'column'
   },
   camera: {
     width: '100%',

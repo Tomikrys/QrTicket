@@ -11,7 +11,14 @@
  * https://docs.expo.io/guides/color-schemes/
  */
 
-import * as React from 'react';
+import React from 'react';
+
+export const ThemeContext = React.createContext({
+  theme: 'light',
+  toggleTheme: () => {},
+});
+
+/*import * as React from 'react';
 import { Text as DefaultText, View as DefaultView } from 'react-native';
 
 import Colors from '../constants/Colors';
@@ -51,4 +58,4 @@ export function View(props: ViewProps) {
   const backgroundColor = useThemeColor({ light: lightColor, dark: darkColor }, 'background');
 
   return <DefaultView style={[{ backgroundColor }, style]} {...otherProps} />;
-}
+}*/
