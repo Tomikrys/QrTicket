@@ -7,7 +7,7 @@
  */
 
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, useWindowDimensions } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import { Text, Button, useTheme, Spinner } from '@ui-kitten/components';
 import { getTicketTypes } from '../../components/Database';
@@ -30,6 +30,9 @@ export default function QrReader({
   handleBarCodeScanned
 }: any) {
 
+  const windowWidth = useWindowDimensions().width;
+  const cameraFitWidth = windowWidth * 4 / 3;
+
   // Render the content
   return (
     <View style={styles.container}>
@@ -39,15 +42,21 @@ export default function QrReader({
       />}
       <BarCodeScanner
         onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-        style={[StyleSheet.absoluteFill, styles.camera]}>
+        style={[StyleSheet.absoluteFill, styles.camera, {width: cameraFitWidth, marginLeft: -(cameraFitWidth-windowWidth)/2}]} />
+      <View style={styles.container}>
         <View style={styles.layerTop} />
         <View style={styles.layerCenter}>
           <View style={styles.layerLeft} />
-          <View style={styles.focused} />
+          <View style={styles.focused}>
+            <View style={[styles.borderCornerTopLeft, styles.borderCorner]} />
+            <View style={[styles.borderCornerTopRight, styles.borderCorner]} />
+            <View style={[styles.borderCornerBottomLeft, styles.borderCorner]} />
+            <View style={[styles.borderCornerBottomRight, styles.borderCorner]} />
+          </View>
           <View style={styles.layerRight} />
         </View>
         <View style={styles.layerBottom} />
-      </BarCodeScanner>
+      </View>
     </View>
   );
 }
@@ -103,6 +112,8 @@ function ScannedModal({ setModalState, setScanned, itemToValidate, markAsUsed, d
 
 // Styles
 const opacity = 'rgba(0, 0, 0, .4)';
+const borderCornerWidth = 7;
+const borderCornerRadius = 20;
 const styles = StyleSheet.create({
   container: {
     left: 0,
@@ -110,11 +121,11 @@ const styles = StyleSheet.create({
     top: 0,
     bottom: 0,
     position: 'absolute',
+    backgroundColor: 'transparent',
   },
   camera: {
-    flex: 1,
     width: '100%',
-    flexDirection: 'column'
+    height: '100%'
   },
   layerTop: {
     flex: 2,
@@ -129,7 +140,9 @@ const styles = StyleSheet.create({
     backgroundColor: opacity
   },
   focused: {
-    flex: 10
+    flex: 10,
+    margin: -borderCornerWidth,
+    zIndex: 10
   },
   layerRight: {
     flex: 1,
@@ -138,6 +151,40 @@ const styles = StyleSheet.create({
   layerBottom: {
     flex: 2,
     backgroundColor: opacity
+  },
+  borderCorner: {
+    borderColor: '#eee',
+    position: 'absolute',
+    width: '15%',
+    height: '15%'
+  },
+  borderCornerTopLeft: {
+    borderTopWidth: borderCornerWidth,
+    borderLeftWidth: borderCornerWidth,
+    borderTopLeftRadius: borderCornerRadius,
+    left: 0,
+    top: 0
+  },
+  borderCornerTopRight: {
+    borderTopWidth: borderCornerWidth,
+    borderRightWidth: borderCornerWidth,
+    borderTopRightRadius: borderCornerRadius,
+    right: 0,
+    top: 0
+  },
+  borderCornerBottomLeft: {
+    borderBottomWidth: borderCornerWidth,
+    borderLeftWidth: borderCornerWidth,
+    borderBottomLeftRadius: borderCornerRadius,
+    left: 0,
+    bottom: 0
+  },
+  borderCornerBottomRight: {
+    borderBottomWidth: borderCornerWidth,
+    borderRightWidth: borderCornerWidth,
+    borderBottomRightRadius: borderCornerRadius,
+    right: 0,
+    bottom: 0
   },
   modalContainer: {
     backgroundColor: 'rgba(255, 255, 255, 0.5)',
