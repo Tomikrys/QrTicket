@@ -37,7 +37,8 @@ export default function QrScreen({ ticketType, markTicketAsUsed, hasPermission, 
   const [modalState, setModalState] = useState<ModalState>({ type: 'HIDDEN', isVisible: false });
 
   const itemToValidate = ticketType.key;
-  const [manualValidationValue, setManualValidationValue] = React.useState('');
+  const [manualValidationInputFocus, setManualValidationInputFocus] = useState('80%');
+  const [manualValidationValue, setManualValidationValue] = useState('');
 
   // handler when barcode is scanned
   const handleBarCodeScanned = ({ type, data }: any) => {
@@ -149,7 +150,7 @@ export default function QrScreen({ ticketType, markTicketAsUsed, hasPermission, 
       />
 
       {/* Manual Validation */}
-      <View style={styles.manualValidationBox}>
+      <View style={[styles.manualValidationBox, {height: manualValidationInputFocus}]}>
         <Input
           value={manualValidationValue}
           autoCapitalize='characters'
@@ -163,6 +164,8 @@ export default function QrScreen({ ticketType, markTicketAsUsed, hasPermission, 
           // onFocus={clearManualValidationInput}
           onChangeText={nextValue => setManualValidationValue(nextValue)}
           onSubmitEditing={e => fetchAndDisplayModal(e.nativeEvent.text)}
+          onFocus={() => (setManualValidationInputFocus('70%'))}
+          onBlur={() => (setManualValidationInputFocus('80%'))}
         />
       </View>
 
